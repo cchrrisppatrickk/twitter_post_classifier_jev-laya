@@ -1,0 +1,482 @@
+<!-- MODAL GRANDE: Vista Detallada de Publicación & Reproductor Multimedia -->
+<div id="richPostModal" class="fixed inset-0 bg-stone-900/80 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+  <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-stone-200 overflow-hidden">
+    
+    <!-- Encabezado del Modal con controles secuenciales y estado -->
+    <div class="p-3.5 sm:px-6 bg-stone-50 border-b border-stone-200 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span id="modalStatusBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+          CLASSIFIED
+        </span>
+        <div>
+          <h2 class="font-bold text-sm text-stone-900 font-mono flex items-center gap-2">
+            <span>Auditoría Profunda de Publicación</span>
+            <span id="modalCategoryBadge" class="px-2 py-0.5 rounded text-[10px] font-mono bg-stone-200 text-stone-700">CAT</span>
+          </h2>
+          <span class="text-[10px] text-stone-500 font-mono" id="modalPostIdSubtitle">Post ID: 2101325703635435523</span>
+        </div>
+      </div>
+
+      <!-- Controles de Navegación Secuencial y Botones de Cabecera -->
+      <div class="flex items-center gap-2">
+        <!-- Botones de Navegación -->
+        <div class="flex items-center bg-stone-200/80 p-0.5 rounded-lg border border-stone-300">
+          <button id="modalPrevPostBtn" class="px-2.5 py-1 rounded text-stone-700 hover:text-black hover:bg-white text-[11px] font-mono font-bold transition flex items-center gap-1" title="Post Anterior (ArrowLeft)">
+            <i class="fa-solid fa-chevron-left text-[9px]"></i>
+            <span class="hidden sm:inline">Anterior</span>
+          </button>
+          <span id="modalNavCounter" class="px-2 text-[10px] font-mono text-stone-600 font-semibold border-x border-stone-300">1 / 1</span>
+          <button id="modalNextPostBtn" class="px-2.5 py-1 rounded text-stone-700 hover:text-black hover:bg-white text-[11px] font-mono font-bold transition flex items-center gap-1" title="Siguiente Post (ArrowRight)">
+            <span class="hidden sm:inline">Siguiente</span>
+            <i class="fa-solid fa-chevron-right text-[9px]"></i>
+          </button>
+        </div>
+
+        <a id="modalExternalPostLink" href="#" target="_blank" class="px-3 py-1.5 bg-stone-200 hover:bg-stone-300 text-stone-800 rounded-lg text-xs font-mono font-semibold flex items-center gap-1.5 transition">
+          <i class="fa-brands fa-x-twitter"></i>
+          <span class="hidden sm:inline">Ver en X</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+        </a>
+        <button id="closeRichModalBtn" class="w-8 h-8 rounded-lg bg-stone-200 hover:bg-stone-300 text-stone-700 flex items-center justify-center transition" title="Cerrar modal (Esc)">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Barra de pestañas principales -->
+    <div class="flex items-center border-b border-stone-200 px-6 bg-white text-xs font-mono">
+      <button data-tab="preview" class="tab-btn active-tab py-3 px-4 flex items-center gap-2 border-b-2 border-transparent transition">
+        <i class="fa-brands fa-x-twitter text-sm"></i>
+        <span>Visualización Fiel & Multimedia</span>
+      </button>
+      <button data-tab="semantics" class="tab-btn py-3 px-4 flex items-center gap-2 border-b-2 border-transparent text-stone-500 hover:text-stone-800 transition">
+        <i class="fa-solid fa-chart-pie text-sm"></i>
+        <span>Desglose Semántico Laya</span>
+      </button>
+      <button data-tab="json" class="tab-btn py-3 px-4 flex items-center gap-2 border-b-2 border-transparent text-stone-500 hover:text-stone-800 transition">
+        <i class="fa-solid fa-code text-sm"></i>
+        <span>Visor Dual Raw JSON</span>
+      </button>
+      <button data-tab="history" id="modalTabHistoryBtn" class="tab-btn py-3 px-4 flex items-center gap-2 border-b-2 border-transparent text-stone-500 hover:text-stone-800 transition">
+        <i class="fa-solid fa-code-compare text-sm"></i>
+        <span>Historial & Comparativa A/B</span>
+        <span id="modalHistoryCountBadge" class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-stone-200 text-stone-700">0</span>
+      </button>
+    </div>
+
+    <!-- Contenedor dinámico de pestañas -->
+    <div class="flex-1 overflow-y-auto p-4 sm:p-6 bg-stone-50/50">
+
+      <!-- PESTAÑA 1: VISUALIZACIÓN FIEL CON REPRODUCTOR DE VIDEO HTML5 / IMAGEN -->
+      <div id="tabContentPreview" class="space-y-4">
+        <div class="max-w-2xl mx-auto bg-white rounded-2xl border border-stone-200 p-5 shadow-sm space-y-4">
+          
+          <!-- Cabecera de Autor con datos reales de Meridian -->
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div id="modalUserAvatar" class="w-11 h-11 rounded-full bg-stone-900 text-white flex items-center justify-center font-bold text-sm font-mono shadow-inner overflow-hidden">
+                X
+              </div>
+              <div>
+                <div class="flex items-center gap-1.5 font-bold text-stone-900 text-sm">
+                  <span id="modalUserName">Usuario Verificado</span>
+                  <i id="modalUserVerified" class="fa-solid fa-circle-check text-sky-500 text-xs"></i>
+                </div>
+                <span id="modalUserHandle" class="text-stone-500 text-xs font-mono">@handle</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <a id="modalDirectMediaLink" href="#" target="_blank" class="px-2.5 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded text-[11px] font-mono flex items-center gap-1 transition" title="Abrir asset directamente">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                <span>Asset directo</span>
+              </a>
+              <i class="fa-brands fa-x-twitter text-xl text-stone-800"></i>
+            </div>
+          </div>
+
+          <!-- Cuerpo del Tweet -->
+          <div id="modalTweetBody" class="text-stone-900 text-base leading-relaxed font-sans whitespace-pre-wrap">
+            Texto completo del tweet...
+          </div>
+
+          <!-- Contenedor Multimedia Real -->
+          <div id="modalMediaContainer" class="rounded-xl overflow-hidden border border-stone-200 bg-stone-950 relative">
+            <!-- Reproductor de Video Real HTML5 MP4 -->
+            <video 
+              id="modalHtmlVideoPlayer" 
+              controls 
+              playsinline 
+              preload="metadata" 
+              class="w-full max-h-[420px] bg-black rounded-xl hidden shadow-inner"
+            >
+              Tu navegador no soporta el reproductor de video HTML5.
+            </video>
+
+            <!-- Galería de Imágenes (1 o múltiples) -->
+            <div id="modalImagesGallery" class="hidden grid gap-2 rounded-xl overflow-hidden max-h-[420px]">
+              <img id="modalMediaDisplayImage" src="" alt="Tweet media visual" class="w-full h-full object-cover rounded-lg" />
+            </div>
+
+            <!-- Banner de Aviso CORS / Restricción CDN de X -->
+            <div id="modalCorsNotice" class="hidden p-3 bg-amber-50 border-t border-amber-200 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-amber-600"></i>
+                <span>Si el reproductor nativo es bloqueado por políticas CORS de Twitter:</span>
+              </div>
+              <a id="modalCorsExternalVideoBtn" href="#" target="_blank" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded font-mono font-semibold text-[11px] flex items-center gap-1 transition">
+                <i class="fa-solid fa-play text-[9px]"></i>
+                <span>Abrir Video en Pestaña Nueva</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="text-stone-500 text-xs font-mono pt-3 border-t border-stone-100 flex items-center justify-between">
+            <div>
+              <span id="modalFormattedDate">10:45 AM · 10 oct. 2026</span>
+              <span class="mx-1">·</span>
+              <span class="text-stone-700 font-semibold" id="modalPostClient">Meridian v2 Scraper</span>
+            </div>
+            <div class="flex items-center gap-2 text-stone-400">
+              <i class="fa-solid fa-fingerprint"></i>
+              <span id="modalMediaHash">sha256:verified</span>
+            </div>
+          </div>
+
+          <!-- Métricas de Scraping Verídicas -->
+          <div class="flex items-center justify-between text-stone-600 text-xs font-mono py-2.5 border-y border-stone-100 px-2">
+            <div class="flex items-center gap-1.5 hover:text-sky-500 cursor-pointer" title="Respuestas">
+              <i class="fa-regular fa-comment text-sm"></i>
+              <span id="modalMetricReplies" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center gap-1.5 hover:text-emerald-500 cursor-pointer" title="Retweets">
+              <i class="fa-solid fa-repeat text-sm"></i>
+              <span id="modalMetricRetweets" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center gap-1.5 hover:text-rose-500 cursor-pointer" title="Likes">
+              <i class="fa-regular fa-heart text-sm"></i>
+              <span id="modalMetricLikes" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center gap-1.5 hover:text-amber-500 cursor-pointer" title="Bookmarks">
+              <i class="fa-regular fa-bookmark text-sm"></i>
+              <span id="modalMetricBookmarks" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center gap-1.5 hover:text-sky-600 cursor-pointer" title="Vistas estimadas">
+              <i class="fa-regular fa-eye text-sm"></i>
+              <span id="modalMetricViews" class="font-bold">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PESTAÑA 2: DESGLOSE SEMÁNTICO FIEL LAYA SYSTEM 1 -->
+      <div id="tabContentSemantics" class="hidden space-y-4 max-w-2xl mx-auto">
+        
+        <!-- Banner de Auditoría Humana (Visible solo si fue reclasificado) -->
+        <div id="modalAuditBanner" class="hidden p-3.5 bg-blue-50 border border-blue-200 rounded-xl text-xs text-blue-900 font-mono flex items-center justify-between shadow-xs">
+          <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-user-check text-blue-600 text-base"></i>
+            <div>
+              <span class="font-bold block">Supervisión Humana Activa (CLASSIFIED_MANUAL)</span>
+              <span class="text-[11px] text-blue-700" id="modalAuditNotes">Esta publicación fue desempata/reclasificada manualmente por el supervisor.</span>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 rounded bg-blue-200 text-blue-900 font-bold text-[10px]">Active Learning</span>
+        </div>
+
+        <!-- Matriz Fiel de Afinidad y Categorías Secundarias en Competencia -->
+        <div class="bg-white rounded-xl border border-stone-200 p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+            <div>
+              <h3 class="font-bold text-stone-900 font-mono text-sm">Afinidad Semántica Laya Engine</h3>
+              <p class="text-stone-500 text-xs">Desglose calculado por PyTorch CPU con Family Gating</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded font-mono font-bold text-xs border border-emerald-200">
+                Primaria: <span id="semanticTopPickName">Launch</span>
+              </span>
+              <span id="semanticPrimaryScoreBadge" class="px-2 py-0.5 bg-stone-900 text-white font-mono font-bold text-xs rounded">
+                85%
+              </span>
+            </div>
+          </div>
+
+          <!-- Categoría Primaria Destacada -->
+          <div class="p-3.5 rounded-lg bg-stone-50 border border-stone-200 space-y-2">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="font-bold text-stone-800 flex items-center gap-2">
+                <span id="semanticPriColorDot" class="w-3 h-3 rounded-full"></span>
+                <span id="semanticPriCategoryLabel">Categoría Primaria</span>
+              </span>
+              <span id="semanticPriCategoryCode" class="px-1.5 py-0.5 rounded bg-stone-200 text-stone-700 text-[10px] font-bold">CAT</span>
+            </div>
+            <div class="w-full bg-stone-200 h-2.5 rounded-full overflow-hidden">
+              <div id="semanticPriScoreBar" class="bg-emerald-600 h-full w-[85%] transition-all"></div>
+            </div>
+          </div>
+
+          <!-- Categorías Secundarias Reales en Competencia -->
+          <div class="space-y-2 pt-1 font-mono text-xs">
+            <div class="flex items-center justify-between text-[11px] font-bold text-stone-700">
+              <span>Categorías Secundarias en Competencia (Laya Output):</span>
+              <span class="text-[10px] text-stone-400 font-normal">Sin bucles ficticios</span>
+            </div>
+            <div id="semanticSecondaryList" class="space-y-2">
+              <!-- Inyectado dinámicamente con secundarias reales -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta de Familia Raíz -->
+        <div id="semanticFamilyCard" class="bg-white rounded-xl border border-stone-200 p-4 space-y-2 font-mono text-xs">
+          <div class="flex items-center justify-between border-b border-stone-100 pb-2">
+            <span class="text-stone-400 block text-[10px] font-bold uppercase">Familia Raíz Taxonómica:</span>
+            <span id="semanticFamilyBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-stone-100 text-stone-700">Familia</span>
+          </div>
+          <div class="flex items-center gap-2.5 pt-1">
+            <div id="semanticFamilyIconWrap" class="w-8 h-8 rounded-lg bg-stone-100 flex items-center justify-center text-stone-800 text-sm">
+              <i class="fa-solid fa-folder"></i>
+            </div>
+            <div>
+              <span id="semanticFamilyName" class="font-bold text-stone-900 block text-xs">Nombre de Familia</span>
+              <span id="semanticFamilyDesc" class="text-[11px] text-stone-500 font-sans">Agrupación maestra de la taxonomía v2.1.0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activos y Dominios Detectados (Assets) -->
+        <div class="bg-white rounded-xl border border-stone-200 p-4 space-y-2 font-mono text-xs">
+          <span class="text-stone-400 block text-[10px] font-bold uppercase">Activos & Dominios Detectados:</span>
+          <div id="semanticAssetsContainer" class="flex flex-wrap items-center gap-2 pt-1">
+            <!-- Chips inyectados dinámicamente: GitHub, Mixamo, Blender, etc. -->
+          </div>
+        </div>
+
+        <!-- Formato y Densidad Técnica -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-white rounded-xl border border-stone-200 p-4 space-y-2 font-mono text-xs">
+            <span class="text-stone-400 block text-[10px] font-bold uppercase">Formato de Publicación:</span>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-shapes text-amber-500 text-base"></i>
+              <div>
+                <span id="semanticHookType" class="font-bold text-stone-900 block">General Discussion</span>
+                <span id="semanticFormatConf" class="text-[10px] text-stone-500 font-mono">Confianza: 88%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl border border-stone-200 p-4 space-y-2 font-mono text-xs">
+            <span class="text-stone-400 block text-[10px] font-bold uppercase">Profundidad Técnica:</span>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-code text-sky-500 text-base"></i>
+              <div>
+                <span id="semanticTechDensity" class="font-bold text-stone-900 block">3.5 / 5.0</span>
+                <span class="text-[10px] text-stone-500 font-sans">Vocabulario especializado detectado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Telemetría de la Consulta -->
+        <div class="bg-white rounded-xl border border-stone-200 p-4 space-y-2 font-mono text-xs">
+          <span class="text-stone-400 block text-[10px] font-bold uppercase">Telemetría de Inferencia Laya:</span>
+          <div class="grid grid-cols-3 gap-2 text-center pt-1">
+            <div class="bg-stone-50 p-2 rounded border border-stone-100">
+              <span class="text-stone-400 text-[9px] block">LATENCIA CPU</span>
+              <span class="font-bold text-stone-800" id="semanticLatencyVal">28.4 ms</span>
+            </div>
+            <div class="bg-stone-50 p-2 rounded border border-stone-100">
+              <span class="text-stone-400 text-[9px] block">MOTOR USADO</span>
+              <span class="font-bold text-stone-800" id="semanticEngineVal">laya</span>
+            </div>
+            <div class="bg-stone-50 p-2 rounded border border-stone-100">
+              <span class="text-stone-400 text-[9px] block">COSTO ASOCIADO</span>
+              <span class="font-bold text-amber-700" id="semanticCostComputed">$0.00000 (Local)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PESTAÑA 3: VISOR DUAL RAW JSON -->
+      <div id="tabContentJson" class="hidden space-y-3 max-w-2xl mx-auto font-mono text-xs">
+        <!-- Selector Dual y Botones de Copiar / Descargar -->
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-xl border border-stone-200">
+          <div class="flex items-center gap-1.5">
+            <button id="subtabJsonScraping" class="subtab-btn active-subtab px-3 py-1.5 rounded-lg font-semibold transition border border-stone-300 text-xs">
+              Scraping Original (Meridian)
+            </button>
+            <button id="subtabJsonLaya" class="subtab-btn px-3 py-1.5 rounded-lg font-semibold transition border border-stone-200 text-stone-600 hover:text-stone-900 text-xs">
+              Salida Laya AI (System 1)
+            </button>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            <button id="copyRawJsonBtn" class="px-3 py-1 bg-stone-200 hover:bg-stone-300 rounded font-semibold text-stone-800 flex items-center gap-1.5 transition text-xs">
+              <i class="fa-regular fa-copy"></i>
+              <span>Copiar JSON</span>
+            </button>
+            <button id="downloadRawJsonBtn" class="px-3 py-1 bg-stone-200 hover:bg-stone-300 rounded font-semibold text-stone-800 flex items-center gap-1.5 transition text-xs">
+              <i class="fa-solid fa-download"></i>
+              <span>Descargar .json</span>
+            </button>
+          </div>
+        </div>
+
+        <pre id="rawJsonCodeBlock" class="bg-stone-950 text-stone-200 p-4 rounded-xl text-xs font-mono overflow-x-auto border border-stone-800 leading-relaxed max-h-[440px]">
+{ /* JSON estructurado */ }
+        </pre>
+      </div>
+
+      <!-- PESTAÑA 4: HISTORIAL & COMPARATIVA A/B DIFF -->
+      <div id="tabContentHistory" class="hidden space-y-4 max-w-2xl mx-auto font-mono text-xs">
+        <!-- Barra de Simulación / Re-evaluación -->
+        <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-stone-900 text-sm flex items-center gap-1.5">
+                <i class="fa-solid fa-microchip text-indigo-600"></i>
+                <span>Re-evaluación Laya System 1</span>
+              </span>
+              <span id="modalDiffTaxonomyBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">v2.1.0</span>
+            </div>
+            <p class="text-stone-500 text-[11px] font-sans mt-0.5">
+              Ejecuta inferencia CPU en caliente (~28 ms) para contrastar con la clasificación previa guardada en SQLite.
+            </p>
+          </div>
+          <button id="modalTriggerDryRunBtn" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold flex items-center gap-2 shadow-xs transition">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Simular Diff A/B</span>
+          </button>
+        </div>
+
+        <!-- Indicador de Carga para Dry-run -->
+        <div id="modalDiffLoading" class="hidden p-6 bg-white rounded-xl border border-stone-200 text-center space-y-2">
+          <i class="fa-solid fa-circle-notch fa-spin text-indigo-600 text-2xl"></i>
+          <p class="text-stone-600 font-semibold text-xs">Calculando inferencia semántica con Laya Engine...</p>
+        </div>
+
+        <!-- Widget de Comparativa A/B Diff (Lado a Lado) -->
+        <div id="modalDiffWidget" class="hidden bg-white p-4 rounded-xl border border-stone-200 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-stone-100 pb-2">
+            <span class="font-bold text-stone-900 flex items-center gap-1.5 text-xs">
+              <i class="fa-solid fa-scale-balanced text-amber-600"></i>
+              <span>Comparativa A/B: Clasificación Guardada vs Nueva Inferencia</span>
+            </span>
+            <span id="modalDiffDeltaBadge" class="px-2 py-0.5 rounded font-mono font-bold text-[10px] bg-stone-100 text-stone-700">
+              Delta: 0%
+            </span>
+          </div>
+
+          <!-- Grid 2 Columnas: Anterior vs Nueva -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- Tarjeta Izquierda: Previa / Guardada -->
+            <div class="p-3 bg-stone-50 rounded-lg border border-stone-200 space-y-2">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-stone-500 font-semibold">Versión Guardada</span>
+                <span id="modalDiffPrevVersionBadge" class="px-1.5 py-0.5 rounded bg-stone-200 text-stone-700 text-[10px]">v2.0.0</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="modalDiffPrevCatDot" class="w-3 h-3 rounded-full bg-stone-400"></span>
+                <span id="modalDiffPrevCatName" class="font-bold text-stone-900 text-xs">Categoria Previa</span>
+              </div>
+              <div class="text-[11px] text-stone-600 flex justify-between">
+                <span>Afinidad:</span>
+                <span id="modalDiffPrevScore" class="font-bold text-stone-800">0%</span>
+              </div>
+              <div class="text-[11px] text-stone-600 flex justify-between">
+                <span>Estado:</span>
+                <span id="modalDiffPrevStatus" class="font-mono text-[10px]">CLASSIFIED</span>
+              </div>
+            </div>
+
+            <!-- Tarjeta Derecha: Nueva Inferencia Laya -->
+            <div class="p-3 bg-indigo-50/60 rounded-lg border border-indigo-200 space-y-2">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-indigo-900 font-semibold">Nueva Inferencia Laya</span>
+                <span id="modalDiffNewVersionBadge" class="px-1.5 py-0.5 rounded bg-indigo-200 text-indigo-900 text-[10px] font-bold">v2.1.0</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="modalDiffNewCatDot" class="w-3 h-3 rounded-full bg-indigo-600"></span>
+                <span id="modalDiffNewCatName" class="font-bold text-indigo-950 text-xs">Nueva Categoria</span>
+              </div>
+              <div class="text-[11px] text-indigo-900 flex justify-between">
+                <span>Afinidad:</span>
+                <span id="modalDiffNewScore" class="font-bold text-indigo-950">0%</span>
+              </div>
+              <div class="text-[11px] text-indigo-900 flex justify-between">
+                <span>Latencia:</span>
+                <span id="modalDiffNewLatency" class="font-mono text-[10px]">28 ms</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resumen de Razonamiento / Cambio -->
+          <div class="p-2.5 bg-stone-50 rounded-lg border border-stone-200 text-[11px] font-sans text-stone-700">
+            <span class="font-mono font-bold text-[10px] uppercase text-stone-500 block mb-0.5">Diagnóstico del Cambio:</span>
+            <p id="modalDiffReasoningText" class="italic text-stone-600">Simulación completada sin mutación en SQLite.</p>
+          </div>
+
+          <!-- Botones de Decisión en 1 Clic -->
+          <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-stone-100">
+            <button id="modalDiffDismissBtn" class="px-3 py-1.5 bg-stone-200 hover:bg-stone-300 text-stone-800 rounded-lg font-semibold flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-xmark text-[11px]"></i>
+              <span>Conservar Clasificación Anterior</span>
+            </button>
+            <button id="modalDiffApplyBtn" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold flex items-center gap-1.5 transition shadow-xs">
+              <i class="fa-solid fa-check text-[11px]"></i>
+              <span>Aceptar y Aplicar Nueva Clasificación</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Historial Cronológico de Versiones Pasadas -->
+        <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-stone-100 pb-2">
+            <div>
+              <span class="font-bold text-stone-900 flex items-center gap-1.5 text-xs">
+                <i class="fa-solid fa-clock-rotate-left text-stone-600"></i>
+                <span>Historial de Versiones & Auditoría de Rollback</span>
+              </span>
+              <p class="text-stone-500 text-[10px] font-sans">
+                Snapshots inmutables archivados en SQLite con trazabilidad total.
+              </p>
+            </div>
+            <button id="modalRefreshHistoryBtn" class="p-1.5 text-stone-400 hover:text-stone-700 rounded transition" title="Refrescar historial">
+              <i class="fa-solid fa-rotate text-xs"></i>
+            </button>
+          </div>
+
+          <!-- Contenedor dinámico de versiones anteriores -->
+          <div id="modalHistoryListContainer" class="space-y-2">
+            <!-- Inyectado dinámicamente con snapshots y botones de Rollback -->
+            <div class="p-4 text-center text-stone-400 text-xs italic">
+              Cargando historial de clasificaciones...
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Barra Inferior de Acción y Reclasificación en Caliente -->
+    <div class="p-3 bg-stone-100 border-t border-stone-200 flex flex-wrap items-center justify-between gap-2.5 font-mono text-xs">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="font-bold text-stone-700 flex items-center gap-1.5">
+          <i class="fa-solid fa-pen-to-square text-amber-600"></i>
+          <span>Reclasificar:</span>
+        </span>
+        <select id="modalReclassifySelect" class="p-1.5 bg-white border border-stone-300 rounded-lg text-stone-800 text-xs focus:outline-none">
+          <!-- Inyectado dinámicamente con optgroups -->
+        </select>
+        <button id="modalReclassifyBtn" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-semibold transition flex items-center gap-1">
+          <i class="fa-solid fa-check text-[10px]"></i>
+          <span>Aplicar y Resolver</span>
+        </button>
+      </div>
+
+      <div class="text-[10px] text-stone-500 font-normal hidden sm:block">
+        Atajos: <kbd class="px-1 py-0.5 bg-stone-200 rounded border border-stone-300 text-stone-700 font-mono">← / →</kbd> navegar · <kbd class="px-1 py-0.5 bg-stone-200 rounded border border-stone-300 text-stone-700 font-mono">Esc</kbd> cerrar
+      </div>
+    </div>
+
+  </div>
+</div>

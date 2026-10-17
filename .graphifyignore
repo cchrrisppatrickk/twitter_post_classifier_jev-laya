@@ -1,0 +1,6 @@
+.playwright-cli/
+logs/
+*.pyc
+__pycache__/
+*.sqlite
+server.pid

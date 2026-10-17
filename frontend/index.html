@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X Content Classifier · AI Metadata Scraper & Category Matrix</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: JetBrains Mono & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['"Inter"', 'sans-serif'],
+          },
+          colors: {
+            app: {
+              bg: '#f7f6f2',
+              card: '#ffffff',
+              border: '#e4e2dd',
+              muted: '#7d7a74',
+              text: '#191816',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Hoja de Estilos Personalizada -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="min-h-screen flex flex-col p-3 sm:p-6 antialiased selection:bg-emerald-200 selection:text-emerald-950">
+
+  <!-- Componente Header & Telemetría Superior -->
+  {% include "components/header.html" %}
+
+  <main class="w-full max-w-[1700px] mx-auto flex-1 mt-4">
+    <!-- Componente Escáner en Vivo & Progreso Dual -->
+    {% include "components/live_scanner.html" %}
+
+    <!-- Componente Barra de Filtros, Vistas y Densidades -->
+    {% include "components/filter_bar.html" %}
+
+    <!-- Componente Contenedores de Vistas (Matriz Waffle, Dispersión Scatter, Tabla Analítica) -->
+    {% include "components/views_container.html" %}
+  </main>
+
+  <!-- Componente Drawer Lateral de Inspección y Reclasificación -->
+  {% include "components/drawer.html" %}
+
+  <!-- Modales del Sistema -->
+  {% include "modals/rich_post_modal.html" %}
+  {% include "modals/ingest_modal.html" %}
+  {% include "modals/taxonomy_modal.html" %}
+  {% include "modals/overlap_modal.html" %}
+  {% include "modals/pipeline_modal.html" %}
+  {% include "modals/exec_report_modal.html" %}
+  {% include "modals/analysis_result_modal.html" %}
+
+  <!-- Componente Overlays, Tooltips Flotantes y Toasts -->
+  {% include "components/footer_toast.html" %}
+
+  <!-- Scripts Modulares con Cache-Busting -->
+  <script src="js/api.js?v=2.1.3"></script>
+  <script src="js/core/utils.js?v=2.1.3"></script>
+  <script src="js/core/state.js?v=2.1.3"></script>
+  <script src="js/data.js?v=2.1.3"></script>
+  <script src="js/matrix.js?v=2.1.3"></script>
+  <script src="js/drawer.js?v=2.1.3"></script>
+  <script src="js/modals/rich_post_modal.js?v=2.1.3"></script>
+  <script src="js/modals/overlap_modal.js?v=2.1.3"></script>
+  <script src="js/modals/pipeline_modal.js?v=2.1.3"></script>
+  <script src="js/modals/exec_report_modal.js?v=2.1.3"></script>
+  <script src="js/modals/analysis_result_modal.js?v=2.1.3"></script>
+  <script src="js/modals/ingest_modal.js?v=2.1.3"></script>
+  <script src="js/modals.js?v=2.1.3"></script>
+  <script src="js/views.js?v=2.1.3"></script>
+  <script src="js/app.js?v=2.1.3"></script>
+</body>
+</html>

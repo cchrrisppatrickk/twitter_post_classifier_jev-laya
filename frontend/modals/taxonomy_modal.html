@@ -1,0 +1,51 @@
+<!-- MODAL: Configuración de Taxonomía / Categorías -->
+<div id="taxonomyModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-stone-200 space-y-4">
+    <div class="flex items-center justify-between pb-2 border-b border-stone-100">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-sliders text-stone-700"></i>
+        <h3 class="font-bold text-sm text-stone-900 font-mono">Taxonomía de Categorías</h3>
+      </div>
+      <button id="closeTaxonomyBtn" class="text-stone-400 hover:text-stone-600">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <p class="text-stone-500 text-[11px]">
+      Define las categorías contra las cuales la IA clasificará las publicaciones del JSON.
+    </p>
+
+    <div id="taxonomyList" class="max-h-60 overflow-y-auto space-y-2 pr-1">
+      <!-- Renderizado dinámicamente -->
+    </div>
+
+    <div class="pt-2 border-t border-stone-100 space-y-2">
+      <span class="text-[10px] font-bold text-stone-600 uppercase font-mono">Añadir Nueva Categoría:</span>
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+        <input type="text" id="newCatCode" placeholder="Cod (ej. TU)" maxlength="4" class="p-1.5 bg-stone-50 border border-stone-300 rounded font-mono text-xs uppercase" />
+        <input type="text" id="newCatName" placeholder="Nombre (ej. Tutorial)" class="sm:col-span-2 p-1.5 bg-stone-50 border border-stone-300 rounded font-sans text-xs" />
+        <select id="newCatParent" class="p-1.5 bg-stone-50 border border-stone-300 rounded font-mono text-xs text-stone-700">
+          <option value="dev_tools">Desarrollo Software & Herramientas</option>
+          <option value="ia">Inteligencia Artificial (IA)</option>
+          <option value="modelado_3d">Modelado 3D & Blender</option>
+          <option value="juegos">Desarrollo de Videojuegos</option>
+          <option value="mangas">Manga, Anime & Arte</option>
+          <option value="negocios_saas">Negocios & SaaS</option>
+          <option value="otros">Otros / Misceláneo</option>
+        </select>
+      </div>
+      <div class="flex gap-2">
+        <input type="text" id="newCatKeywords" placeholder="Palabras clave separadas por comas (ej. howto, step by step, guide)" class="flex-1 p-1.5 bg-stone-50 border border-stone-300 rounded text-xs font-mono" />
+        <button id="addNewCatBtn" class="px-4 py-1.5 bg-stone-900 text-white font-semibold rounded text-xs font-mono hover:bg-black transition whitespace-nowrap">
+          + Añadir
+        </button>
+      </div>
+    </div>
+
+    <div class="pt-2 flex justify-end font-mono text-xs">
+      <button id="closeTaxonomyBottomBtn" class="px-4 py-2 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200 font-semibold">
+        Listo
+      </button>
+    </div>
+  </div>
+</div>

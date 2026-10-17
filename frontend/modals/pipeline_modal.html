@@ -1,0 +1,47 @@
+<!-- MODAL: Consola de Pipeline de Scraping & Logs en Vivo -->
+<div id="pipelineModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-stone-950 text-stone-200 rounded-2xl max-w-2xl w-full p-5 shadow-2xl border border-stone-800 space-y-4 font-mono">
+    <div class="flex items-center justify-between border-b border-stone-800 pb-3">
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
+        <h3 class="text-xs font-bold text-white uppercase tracking-wider">Scraper Engine & Pipeline Telemetry</h3>
+      </div>
+      <button id="closePipelineModalBtn" class="text-stone-400 hover:text-white">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px]">
+      <div class="bg-stone-900 p-2.5 rounded-lg border border-stone-800">
+        <span class="text-stone-400 block">Rate Limit Pool:</span>
+        <strong class="text-emerald-400 text-xs">482 / 500 req</strong>
+      </div>
+      <div class="bg-stone-900 p-2.5 rounded-lg border border-stone-800">
+        <span class="text-stone-400 block">Proxies Activos:</span>
+        <strong class="text-sky-400 text-xs">12 Residenciales</strong>
+      </div>
+      <div class="bg-stone-900 p-2.5 rounded-lg border border-stone-800">
+        <span class="text-stone-400 block">Tokens Inferencia:</span>
+        <strong class="text-amber-400 text-xs">184.2K</strong>
+      </div>
+      <div class="bg-stone-900 p-2.5 rounded-lg border border-stone-800">
+        <span class="text-stone-400 block">HTTP 200 Ratio:</span>
+        <strong class="text-emerald-400 text-xs">99.82%</strong>
+      </div>
+    </div>
+
+    <!-- Consola de Logs Streaming -->
+    <div class="bg-black/80 rounded-xl p-3 border border-stone-800 font-mono text-[10px] space-y-1.5 h-48 overflow-y-auto text-emerald-400">
+      <div>[12:38:02] <span class="text-stone-400">INIT</span> Connected to X GraphQL Scraper pipeline via TLS 1.3</div>
+      <div>[12:38:03] <span class="text-sky-400">SESSION</span> Authenticated with proxy rotation pool [EU-West-4]</div>
+      <div>[12:38:04] <span class="text-emerald-400">FETCH</span> Extracted 796 post metadata objects for target profile</div>
+      <div>[12:38:05] <span class="text-amber-400">JEV_EMBED</span> Batch vectorized 64 posts. Multi-label confidence: 0.941</div>
+      <div>[12:38:06] <span class="text-purple-400">CACHE</span> 98.4% taxonomy hit rate on existing vector cache</div>
+      <div>[12:38:08] <span class="text-emerald-400">READY</span> Waffle heatmap rendered. Anomaly detection completed: 14 outliers flagged.</div>
+    </div>
+
+    <div class="flex justify-end gap-2 pt-2 text-xs">
+      <button id="closePipelineBottomBtn" class="px-4 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-white font-semibold">Cerrar Consola</button>
+    </div>
+  </div>
+</div>

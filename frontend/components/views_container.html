@@ -1,0 +1,88 @@
+<!-- CONTENEDOR 1: Matriz Waffle Heatmap -->
+<section id="matrixViewContainer" class="block space-y-2 mt-4">
+  <div class="pb-2 border-b border-stone-300 text-[10px] tracking-wider text-stone-500 font-semibold flex items-center justify-between uppercase">
+    <div class="flex items-center gap-6">
+      <span class="w-32 sm:w-36">HOOK · SCORE</span>
+      <div class="hidden sm:flex items-center gap-3 text-stone-400 font-mono">
+        <span>TILE = POST</span>
+        <span>·</span>
+        <span>ROW LENGTH = FRECUENCIA</span>
+        <span>·</span>
+        <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-sm bg-emerald-700 inline-block"></span> VERDE VIRAL</span>
+        <span>·</span>
+        <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-sm bg-rose-700 inline-block"></span> ROJO FLOP</span>
+        <span>·</span>
+        <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-sm bg-amber-500 border border-amber-600 inline-block"></span> ANOMALÍA</span>
+      </div>
+    </div>
+    <div class="text-right font-mono">
+      <span>AVG LIKES</span>
+    </div>
+  </div>
+
+  <!-- Contenedor dinámico de filas por categoría -->
+  <div id="categoriesContainer" class="divide-y divide-stone-200/80">
+    <!-- Inyectado dinámicamente -->
+  </div>
+</section>
+
+<!-- CONTENEDOR 2: Vista de Cuadrante Scatter (Score de Afinidad vs Likes Reales) -->
+<section id="scatterViewContainer" class="hidden mt-4">
+  <div class="bg-white rounded-2xl p-5 border border-stone-200 shadow-sm space-y-4 font-mono">
+    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-100 pb-3">
+      <div>
+        <h2 class="text-sm font-bold text-stone-900 flex items-center gap-2">
+          <i class="fa-solid fa-chart-line text-sky-600"></i>
+          <span>Matriz Cuadrante: Score Teórico de Afinidad vs. Engagement Real</span>
+        </h2>
+        <p class="text-[11px] text-stone-500 font-sans">Identifica publicaciones con rendimiento atípico y valida la precisión del algoritmo semántico Jev.</p>
+      </div>
+      <div class="flex items-center gap-3 text-[10px]">
+        <span class="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold">
+          ● Cuadrante Oro: Alto Score + Alto Like
+        </span>
+        <span class="flex items-center gap-1 text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 font-semibold">
+          ▲ Outlier: Bajo Score + Viral Orgánico
+        </span>
+      </div>
+    </div>
+
+    <!-- Canvas interactivo de dispersión -->
+    <div class="relative w-full h-[480px] bg-stone-50 rounded-xl border border-stone-200 overflow-hidden">
+      <canvas id="scatterCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+      <div id="scatterTooltip" class="absolute hidden pointer-events-none bg-stone-900 text-white text-[10px] p-2.5 rounded-lg shadow-xl z-30 font-sans max-w-xs border border-stone-700 transition-opacity"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENEDOR 3: Vista de Tabla Ejecutiva Analítica -->
+<section id="tableViewContainer" class="hidden mt-4">
+  <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden font-mono text-[11px]">
+    <div class="p-4 bg-stone-50 border-b border-stone-200 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2 font-bold text-stone-900">
+        <i class="fa-solid fa-table-list text-purple-600"></i>
+        <span>Auditoría Detallada de Taxonomía y ROI de Publicación</span>
+      </div>
+      <span class="text-stone-400 text-[10px]">Haz clic en cualquier categoría para filtrarla en la vista Waffle</span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left divide-y divide-stone-200">
+        <thead class="bg-stone-100/70 text-stone-600 uppercase text-[9px] tracking-wider font-bold">
+          <tr>
+            <th class="py-2.5 px-3">Código</th>
+            <th class="py-2.5 px-3">Categoría</th>
+            <th class="py-2.5 px-3 text-right">Volumen</th>
+            <th class="py-2.5 px-3 text-right">Score Promedio</th>
+            <th class="py-2.5 px-3 text-right">Avg Likes</th>
+            <th class="py-2.5 px-3 text-right">% Híbridos</th>
+            <th class="py-2.5 px-3 text-right">Tasa Viral (&gt;70)</th>
+            <th class="py-2.5 px-3">Patrón Semántico Clave</th>
+          </tr>
+        </thead>
+        <tbody id="tableCategoryBody" class="divide-y divide-stone-100 font-mono">
+          <!-- Inyectado dinámicamente -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

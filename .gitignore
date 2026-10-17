@@ -1,0 +1,31 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Logs del servidor y procesos
+logs/
+*.log
+*.pid
+server.pid
+
+# Herramientas locales y temporales
+.playwright-cli/
+scratch/
+.pytest_cache/
+graphify-out/
+
+# Variables de entorno y secretos locales
+.env
+.env.local
+
+# Bases de datos SQLite locales (se preserva categories.json)
+backend/data/*.sqlite
+backend/data/*.sqlite-wal
+backend/data/*.sqlite-shm
+!backend/data/categories.json

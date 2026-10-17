@@ -1,0 +1,1871 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "registry_version": "2.1.1",
+  "schema_version": "2.1.1",
+  "updated_at": "2026-10-15T21:45:00Z",
+  "created_at": "2026-10-10T00:00:00Z",
+  "author": "JEV_APPS Team",
+  "description": "Registro maestro de categorías v2.1.1: taxonomía temática multi-label expandida, boosters deterministas por dominio y preguntas tipadas System 1 optimizadas según jev-questions.",
+  "global_settings": {
+    "fallback_category": "otros",
+    "fallback_format": "other",
+    "default_threshold": 0.75,
+    "min_confidence_abstain": 0.55,
+    "multi_label": true,
+    "max_labels_per_post": 4,
+    "primary_category_strategy": "boosted_score",
+    "min_threshold_for_primary": 0.7,
+    "language_filter": [
+      "es",
+      "en",
+      "ja"
+    ]
+  },
+  "scoring": {
+    "description": "Sistema de puntuación para desempate y selección de categoría primaria en modo multi-label con bonificaciones deterministas.",
+    "boosters": {
+      "reproducible_asset": 0.1,
+      "specificity_child": 0.05,
+      "keyword_match": 0.03,
+      "media_present": 0.02
+    },
+    "formula": "boosted_score = confidence + (reproducible_asset ? bonus : 0) + (es_subcategoria ? bonus : 0) + (keyword_match ? bonus : 0)",
+    "asset_type_bonuses": {
+      "github_repo": 0.1,
+      "comfyui_workflow": 0.1,
+      "huggingface_model": 0.1,
+      "civitai_lora": 0.1,
+      "installation_guide": 0.06,
+      "tutorial_link": 0.05,
+      "prompt_share": 0.04,
+      "none": 0.0
+    },
+    "asset_domain_matchers": {
+      "github_repo": [
+        "github.com/",
+        "gitlab.com/"
+      ],
+      "huggingface_model": [
+        "huggingface.co/",
+        "hf.co/"
+      ],
+      "civitai_lora": [
+        "civitai.com/"
+      ],
+      "comfyui_workflow": [
+        "openart.ai/workflows",
+        "comfyworkflows.com",
+        "flowt.ai"
+      ],
+      "tutorial_link": [
+        "youtube.com/",
+        "youtu.be/",
+        "medium.com/",
+        "substack.com/"
+      ]
+    }
+  },
+  "supplementary_questions": {
+    "content_format": {
+      "type": "choice",
+      "instructions": "¿Qué acción comunicativa principal está realizando el autor con esta publicación? Elige la opción que describa mejor el propósito del post.",
+      "active": true,
+      "criteria": {
+        "launch": "El autor anuncia formalmente la disponibilidad pública de un recurso nuevo (producto, versión 1.0, servicio o release). Excluir si solo comparte código sin anunciar disponibilidad.",
+        "opensource": "El autor comparte código fuente, repositorio público descargable o librería para que otros la usen o estudien. Excluir productos comerciales cerrados.",
+        "builddemo": "El autor muestra el estado visual o técnico de algo en desarrollo activo (WIP, canvas interactivo, devlog o prototipo). Excluir si ya es lanzamiento público.",
+        "explainer": "El autor enseña, explica o desglosa un flujo técnico paso a paso o la arquitectura interna de un sistema. Excluir si solo muestra el resultado sin explicar el proceso.",
+        "receipt": "El autor comparte resultados cuantificables de negocio (ingresos, MRR, facturación, crecimiento de usuarios o hitos medibles). Excluir planes futuros sin resultados.",
+        "curation": "El autor recopila, recomienda o lista herramientas y recursos útiles creados por terceros. Excluir si habla únicamente de su propio trabajo.",
+        "other": "Publicaciones cotidianas, opiniones personales, debates informales, memes, solicitud de ayuda o contenidos que no encajan en las opciones anteriores (Opción de escape obligatoria)."
+      }
+    },
+    "technical_depth": {
+      "type": "score",
+      "instructions": "¿Qué nivel de profundidad o especialización técnica demostrable presenta la publicación?",
+      "active": true,
+      "criteria": [
+        "Nivel 1: Divulgación general, memes, humor o reflexiones de opinión sin contenido técnico verificable",
+        "Nivel 2: Demostración visual superficial, captura de pantalla o descripción conceptual sin detalles de implementación",
+        "Nivel 3: Flujo de trabajo técnico aplicable, configuración detallada o metodología reproducible paso a paso",
+        "Nivel 4: Parámetros técnicos avanzados, prompts reproducibles completos, fragmentos de código o configuraciones complejas",
+        "Nivel 5: Repositorio de código fuente completo, arquitectura de software, shaders matemáticos o release formal de ingeniería"
+      ]
+    },
+    "reproducible_asset_type": {
+      "type": "choice",
+      "instructions": "¿Qué tipo de recurso reproducible incluye o enlaza la publicación?",
+      "active": true,
+      "criteria": {
+        "github_repo": "Enlace directo a repositorio de GitHub, GitLab o similar con código fuente descargable.",
+        "comfyui_workflow": "Enlace o archivo de workflow de ComfyUI descargable (JSON o imagen con metadata embebida).",
+        "huggingface_model": "Enlace a modelo, dataset o Space alojado en Hugging Face (checkpoint o pesos).",
+        "civitai_lora": "Enlace a LoRA, checkpoint o embedding en Civitai u otra plataforma especializada.",
+        "installation_guide": "Instrucciones paso a paso para instalar y configurar dependencias o entornos de ejecución.",
+        "tutorial_link": "Enlace a tutorial externo detallado (video, artículo de blog o hilo formativo).",
+        "prompt_share": "Comparte la receta o prompt textual completo necesario para reproducir el resultado.",
+        "none": "No incluye ni enlaza ningún recurso reproducible identificable (Opción de escape obligatoria)."
+      }
+    },
+    "is_uncensored_or_nsfw": {
+      "type": "noul",
+      "instructions": "¿La publicación contiene, enlaza o promueve explícitamente contenido erótico para adultos, pornografía o modelos sin censura para generación de desnudez?",
+      "active": true,
+      "criteria": {
+        "true": "El post incluye imágenes explícitas para adultos, o comparte checkpoints/LoRAs específicamente diseñados para omitir filtros de seguridad en generación erótica.",
+        "false": "El post es apto para todo público o aborda arte digital, modelado o tecnología sin componentes eróticos explícitos."
+      }
+    },
+    "is_local_first": {
+      "type": "noul",
+      "instructions": "¿La publicación enfatiza la capacidad de descargar, desplegar o ejecutar modelos de IA de forma autónoma en hardware propio o entornos locales sin requerir conexión a APIs en la nube?",
+      "active": true,
+      "criteria": {
+        "true": "El contenido se centra en ejecución local, autoalojamiento (self-hosted), cuantizaciones para inferencia offline o herramientas de ejecución en máquina propia.",
+        "false": "El contenido depende de servicios en la nube, APIs remotas propietarias o no aborda la ejecución local autónoma."
+      }
+    }
+  },
+  "topic_categories": [
+    {
+      "id": "ia",
+      "label": "Inteligencia Artificial (General)",
+      "parent_id": null,
+      "priority": 100,
+      "threshold": 0.75,
+      "is_family": true,
+      "description": "Contenido general sobre inteligencia artificial que no encaja específicamente en una subcategoría. Noticias, opiniones, comparativas de alto nivel o discusiones sobre el impacto de la IA.",
+      "examples": [
+        "Comparativa entre GPT, Claude y Gemini a nivel general",
+        "Opinión sobre el impacto de la IA en el mercado laboral"
+      ],
+      "exclusions": [
+        "Contenido específico de generación de imágenes, video, audio o 3D (usar subcategorías)"
+      ],
+      "keywords": [
+        "ia",
+        "ai",
+        "inteligencia artificial",
+        "machine learning"
+      ],
+      "boosters": {
+        "reproducible_assets": [],
+        "keywords": []
+      },
+      "color_hex": "#8b5cf6",
+      "active": true
+    },
+    {
+      "id": "ia_local",
+      "label": "IA Local y Self-Hosted",
+      "parent_id": "ia",
+      "priority": 15,
+      "threshold": 0.82,
+      "description": "Ejecución local de modelos de IA: LLMs en Ollama, LM Studio, llama.cpp, vLLM, self-hosting, privacidad local, modelos cuantizados para GPU de consumo, y despliegue offline.",
+      "examples": [
+        "Corriendo Llama 3.1 8B en Ollama con 8GB de VRAM",
+        "Guía de instalación de vLLM para servir modelos localmente",
+        "Comparativa de rendimiento GGUF vs AWQ en RTX 3060"
+      ],
+      "exclusions": [
+        "Uso de APIs en la nube sin énfasis en ejecución local"
+      ],
+      "keywords": [
+        "ollama",
+        "lm studio",
+        "llama.cpp",
+        "vllm",
+        "self-hosted",
+        "local",
+        "offline"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "installation_guide",
+          "huggingface_model"
+        ],
+        "keywords": [
+          "local",
+          "self-hosted",
+          "offline",
+          "ollama"
+        ]
+      },
+      "color_hex": "#7c3aed",
+      "active": true
+    },
+    {
+      "id": "hardware_benchmarks",
+      "label": "Hardware y Benchmarks para IA / 3D",
+      "parent_id": "ia_local",
+      "priority": 8,
+      "threshold": 0.82,
+      "description": "Pruebas de hardware, consumo de VRAM, comparativas de GPUs (RTX 4090, 4080, 3060), Mac Apple Silicon (M2/M3/M4 Max), eGPUs, velocidad de tokens/segundo y configuraciones de estaciones de trabajo.",
+      "examples": [
+        "Benchmark de RTX 4090 vs RTX 3060 generando imágenes con Flux a 1024x1024",
+        "MacBook Pro M4 Max corriendo Llama 3.3 70B: consumo de memoria unificada",
+        "Cómo optimizar el ancho de banda PCIe para inferencia local de LLMs"
+      ],
+      "exclusions": [
+        "Desarrollo de software puro sin mención de especificaciones de hardware"
+      ],
+      "keywords": [
+        "vram",
+        "gpu",
+        "rtx",
+        "nvidia",
+        "apple silicon",
+        "m4",
+        "benchmark",
+        "tokens/s",
+        "hardware"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "tutorial_link",
+          "github_repo"
+        ],
+        "keywords": [
+          "vram",
+          "benchmark",
+          "rtx",
+          "gpu"
+        ]
+      },
+      "color_hex": "#6366f1",
+      "active": true
+    },
+    {
+      "id": "ia_generativa",
+      "label": "IA Generativa (Imagen, Video, Audio, Texto)",
+      "parent_id": "ia",
+      "priority": 20,
+      "threshold": 0.8,
+      "is_family": true,
+      "description": "Contenido sobre generación con IA que no se enfoca en un software o modelo específico. Familia que agrupa generación de imágenes, video, audio, 3D, texto y visión.",
+      "examples": [
+        "Diferencias entre difusión y flow matching en generación multimodal",
+        "Estado del arte en generación generativa en 2026"
+      ],
+      "exclusions": [],
+      "keywords": [
+        "generative ai",
+        "diffusion",
+        "generacion",
+        "generativa"
+      ],
+      "boosters": {
+        "reproducible_assets": [],
+        "keywords": []
+      },
+      "color_hex": "#a855f7",
+      "active": true
+    },
+    {
+      "id": "gen_imagenes",
+      "label": "Generación de Imágenes",
+      "parent_id": "ia_generativa",
+      "priority": 5,
+      "threshold": 0.82,
+      "description": "Generación de imágenes con IA: Stable Diffusion, Flux, Midjourney, DALL·E, SDXL, técnicas de prompting, control de composición (ControlNet), LoRAs de estilo, y resultados visuales de estos modelos.",
+      "examples": [
+        "Consejos de prompts en japonés para que las ilustraciones con IA no queden量産型",
+        "Nuevo LoRA de Flux para estilo acuarela",
+        "Comparativa de SDXL vs Flux en retratos"
+      ],
+      "exclusions": [
+        "Generación de video (usar gen_video)",
+        "Generación de audio (usar gen_audio)",
+        "Generación 3D (usar gen_3d)"
+      ],
+      "keywords": [
+        "stable diffusion",
+        "flux",
+        "sdxl",
+        "midjourney",
+        "dall-e",
+        "prompt",
+        "controlnet",
+        "lora"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "prompt_share",
+          "huggingface_model",
+          "civitai_lora",
+          "comfyui_workflow"
+        ],
+        "keywords": [
+          "flux",
+          "sdxl",
+          "stable diffusion",
+          "midjourney"
+        ]
+      },
+      "color_hex": "#c026d3",
+      "active": true
+    },
+    {
+      "id": "gen_video",
+      "label": "Generación de Video",
+      "parent_id": "ia_generativa",
+      "priority": 5,
+      "threshold": 0.83,
+      "description": "Generación de video con IA: Sora, Runway, Kling, Veo, Luma, Mochi, Hunyuan Video, Wan, LTX-Video, técnicas de animación por IA y resultados en movimiento.",
+      "examples": [
+        "Wan 2.2 genera clips de 10 segundos con coherencia temporal",
+        "Comparativa de Sora vs Kling vs Veo en escenas de acción",
+        "Animar un storyboard con Hunyuan Video"
+      ],
+      "exclusions": [
+        "Generación de imágenes estáticas (usar gen_imagenes)"
+      ],
+      "keywords": [
+        "sora",
+        "runway",
+        "kling",
+        "veo",
+        "luma",
+        "mochi",
+        "hunyuan",
+        "wan",
+        "ltx-video",
+        "video generation",
+        "ai video",
+        "video ai"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "comfyui_workflow",
+          "huggingface_model",
+          "prompt_share"
+        ],
+        "keywords": [
+          "video",
+          "text-to-video",
+          "img2video",
+          "ai video"
+        ]
+      },
+      "color_hex": "#db2777",
+      "active": true
+    },
+    {
+      "id": "gen_audio",
+      "label": "Generación de Audio, Música y Voz con IA",
+      "parent_id": "ia_generativa",
+      "priority": 5,
+      "threshold": 0.83,
+      "description": "Generación de audio, voz, efectos de sonido y música con IA: Suno, Udio, ElevenLabs, Whisper, Kokoro TTS, F5-TTS, clonación de voz, síntesis de voz local y pipelines de audio generativo.",
+      "examples": [
+        "Kokoro TTS: modelo ultraligero de 82M de parámetros para síntesis de voz en tiempo real",
+        "Generé una banda sonora orquestal completa con Suno v4",
+        "Pipeline local con Whisper y ElevenLabs para agentes conversacionales"
+      ],
+      "exclusions": [
+        "Edición de audio tradicional sin modelos de IA"
+      ],
+      "keywords": [
+        "tts",
+        "voice",
+        "audio",
+        "suno",
+        "udio",
+        "elevenlabs",
+        "whisper",
+        "kokoro",
+        "voice cloning",
+        "music gen"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "huggingface_model",
+          "github_repo",
+          "comfyui_workflow"
+        ],
+        "keywords": [
+          "tts",
+          "audio",
+          "suno",
+          "voice",
+          "whisper"
+        ]
+      },
+      "color_hex": "#ec4899",
+      "active": true
+    },
+    {
+      "id": "gen_3d",
+      "label": "Generación 3D con IA",
+      "parent_id": "ia_generativa",
+      "priority": 5,
+      "threshold": 0.83,
+      "description": "Generación de modelos 3D con IA: Trellis, Hunyuan3D, TripoSR, InstantMesh, Stable Fast 3D, y pipelines que combinan generación IA con limpieza/retopología en Blender u otro software 3D.",
+      "examples": [
+        "Trellis genera malla 3D y la limpio en Blender",
+        "Comparativa de Hunyuan3D vs TripoSR para assets de juego",
+        "Pipeline ComfyUI → Trellis → Blender para generar props"
+      ],
+      "exclusions": [
+        "Modelado 3D manual sin componente de IA (usar modelado_3d)"
+      ],
+      "keywords": [
+        "trellis",
+        "hunyuan3d",
+        "triposr",
+        "instantmesh",
+        "stable fast 3d",
+        "image-to-3d",
+        "3d generation"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "comfyui_workflow",
+          "github_repo",
+          "huggingface_model"
+        ],
+        "keywords": [
+          "trellis",
+          "image-to-3d",
+          "text-to-3d"
+        ]
+      },
+      "color_hex": "#9333ea",
+      "active": true
+    },
+    {
+      "id": "gen_texto",
+      "label": "Generación de Texto y LLMs",
+      "parent_id": "ia_generativa",
+      "priority": 8,
+      "threshold": 0.8,
+      "description": "Generación de texto con LLMs: GPT, Claude, Gemini, Llama, Mistral, Qwen, DeepSeek, prompts para escritura, RAG, fine-tuning de modelos de lenguaje y aplicaciones basadas en texto.",
+      "examples": [
+        "Cómo escribir system prompts efectivos para Claude",
+        "Fine-tuning de Qwen 2.5 para clasificación de tickets",
+        "Comparativa de GPT-5 vs DeepSeek V3 en razonamiento"
+      ],
+      "exclusions": [
+        "Agentes autónomos (usar agentes_ia)"
+      ],
+      "keywords": [
+        "llm",
+        "gpt",
+        "claude",
+        "gemini",
+        "llama",
+        "mistral",
+        "qwen",
+        "deepseek",
+        "prompt",
+        "rag",
+        "fine-tuning"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "huggingface_model",
+          "prompt_share",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "llm",
+          "prompt",
+          "rag"
+        ]
+      },
+      "color_hex": "#7e22ce",
+      "active": true
+    },
+    {
+      "id": "vision",
+      "label": "Visión por Computadora",
+      "parent_id": "ia_generativa",
+      "priority": 10,
+      "threshold": 0.82,
+      "description": "Visión por computadora: segmentación, detección de objetos, OCR, SAM (Segment Anything), YOLO, modelos multimodales que analizan imágenes, y aplicaciones de análisis visual.",
+      "examples": [
+        "Segment Anything 2 para separar objetos en video",
+        "YOLOv11 detecta objetos en tiempo real en CPU",
+        "OCR con PaddleOCR para documentos escaneados"
+      ],
+      "exclusions": [
+        "Generación de imágenes (usar gen_imagenes)"
+      ],
+      "keywords": [
+        "vision",
+        "sam",
+        "yolo",
+        "ocr",
+        "segmentation",
+        "detection",
+        "multimodal"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "huggingface_model",
+          "installation_guide"
+        ],
+        "keywords": [
+          "vision",
+          "detection",
+          "segmentation"
+        ]
+      },
+      "color_hex": "#6d28d9",
+      "active": true
+    },
+    {
+      "id": "comfyui",
+      "label": "ComfyUI",
+      "parent_id": "ia",
+      "priority": 10,
+      "threshold": 0.85,
+      "description": "Contenido específico sobre ComfyUI: workflows completos, nodos custom, instalación, optimización, manager de modelos, y pipelines visuales construidos en esta interfaz. Debe mencionar ComfyUI explícitamente.",
+      "examples": [
+        "Workflow de ComfyUI para generar imágenes con Flux + ControlNet",
+        "Instalación de ComfyUI Manager en Windows",
+        "Nodo custom para integración con Trellis"
+      ],
+      "exclusions": [
+        "Otros interfaces de difusión (Automatic1111, Forge) sin mención de ComfyUI"
+      ],
+      "keywords": [
+        "comfyui",
+        "workflow",
+        "nodo",
+        "custom node",
+        "comfyui manager"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "comfyui_workflow",
+          "github_repo",
+          "installation_guide"
+        ],
+        "keywords": [
+          "comfyui",
+          "workflow"
+        ]
+      },
+      "color_hex": "#a21caf",
+      "active": true
+    },
+    {
+      "id": "comfyui_workflows",
+      "label": "Workflows de ComfyUI",
+      "parent_id": "comfyui",
+      "priority": 3,
+      "threshold": 0.88,
+      "description": "Workflows específicos de ComfyUI compartidos como JSON, PNG con metadata o links descargables. Incluye workflows de generación de imágenes, video, 3D, upscaling, restauración y cualquier pipeline visual reproducible.",
+      "examples": [
+        "Workflow de ComfyUI para Trellis + limpieza en Blender",
+        "Workflow JSON para SDXL con Refiner y FaceDetailer",
+        "Pipeline de ComfyUI para animar personajes con AnimateDiff"
+      ],
+      "exclusions": [
+        "Discusiones generales de ComfyUI sin workflow descargable"
+      ],
+      "keywords": [
+        "workflow",
+        "json",
+        "comfyui",
+        "pipeline",
+        "descargable"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "comfyui_workflow"
+        ],
+        "keywords": [
+          "workflow",
+          "json"
+        ]
+      },
+      "color_hex": "#86198f",
+      "active": true
+    },
+    {
+      "id": "comfyui_instalacion",
+      "label": "Instalación y Configuración de ComfyUI",
+      "parent_id": "comfyui",
+      "priority": 4,
+      "threshold": 0.88,
+      "description": "Guías de instalación de ComfyUI, configuración de nodos, resolución de errores, dependencias de Python, instalación de modelos y setup de entornos.",
+      "examples": [
+        "Cómo instalar ComfyUI en WSL2 con soporte CUDA",
+        "Solución al error 'module not found' en ComfyUI",
+        "Configurar ComfyUI portable con modelos en otra unidad"
+      ],
+      "exclusions": [
+        "Workflows sin componente de instalación"
+      ],
+      "keywords": [
+        "instalacion",
+        "setup",
+        "comfyui",
+        "troubleshooting"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "installation_guide",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "instalar",
+          "setup",
+          "configurar"
+        ]
+      },
+      "color_hex": "#701a75",
+      "active": true
+    },
+    {
+      "id": "modelos_ia",
+      "label": "Modelos de IA (Checkpoints, LoRAs, Cuantizados)",
+      "parent_id": "ia",
+      "priority": 15,
+      "threshold": 0.82,
+      "is_family": true,
+      "description": "Familia de categorías sobre modelos de IA descargables: checkpoints, LoRAs, embeddings, modelos cuantizados y modelos sin censura. Posts que comparten enlaces a modelos o discuten sus características.",
+      "examples": [
+        "Nuevo checkpoint de Flux disponible en Hugging Face",
+        "LoRA de estilo anime publicado en Civitai"
+      ],
+      "exclusions": [],
+      "keywords": [
+        "modelo",
+        "checkpoint",
+        "lora",
+        "embedding"
+      ],
+      "boosters": {
+        "reproducible_assets": [],
+        "keywords": []
+      },
+      "color_hex": "#5b21b6",
+      "active": true
+    },
+    {
+      "id": "modelos_huggingface",
+      "label": "Modelos en Hugging Face",
+      "parent_id": "modelos_ia",
+      "priority": 5,
+      "threshold": 0.85,
+      "description": "Posts que comparten enlaces directos a modelos en Hugging Face: checkpoints, LoRAs, datasets, Spaces o demos. Debe incluir un enlace verificable a huggingface.co.",
+      "examples": [
+        "Nuevo modelo Qwen 2.5 72B disponible en Hugging Face",
+        "Dataset de 1M de prompts publicado en HF",
+        "Space de demostración para Trellis en HF"
+      ],
+      "exclusions": [
+        "Menciones a Hugging Face sin enlace directo a un modelo"
+      ],
+      "keywords": [
+        "huggingface",
+        "hf",
+        "modelo",
+        "checkpoint",
+        "dataset",
+        "space"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "huggingface_model"
+        ],
+        "keywords": [
+          "huggingface",
+          "hf.co"
+        ]
+      },
+      "color_hex": "#4c1d95",
+      "active": true
+    },
+    {
+      "id": "lora_civitai",
+      "label": "LoRAs y Modelos en Civitai",
+      "parent_id": "modelos_ia",
+      "priority": 5,
+      "threshold": 0.85,
+      "description": "Posts que comparten enlaces a LoRAs, checkpoints o embeddings en Civitai u otras plataformas de modelos comunitarios. Incluye links directos y descripciones de estilo.",
+      "examples": [
+        "LoRA de estilo pixel art en Civitai",
+        "Checkpoint realista entrenado con 10K imágenes",
+        "Embedding negativo para mejorar manos en SDXL"
+      ],
+      "exclusions": [
+        "Modelos de Hugging Face (usar modelos_huggingface)"
+      ],
+      "keywords": [
+        "civitai",
+        "lora",
+        "checkpoint",
+        "embedding",
+        "style"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "civitai_lora"
+        ],
+        "keywords": [
+          "civitai",
+          "lora"
+        ]
+      },
+      "color_hex": "#3b0764",
+      "active": true
+    },
+    {
+      "id": "modelos_cuantificados",
+      "label": "Modelos Cuantizados",
+      "parent_id": "modelos_ia",
+      "priority": 6,
+      "threshold": 0.87,
+      "description": "Modelos cuantizados para ejecución eficiente: GGUF, AWQ, GPTQ, EXL2, bitsandbytes, y técnicas de compresión para correr en GPU de consumo o CPU. Incluye benchmarks de velocidad y calidad.",
+      "examples": [
+        "Qwen 2.5 32B en GGUF Q4_K_M corre en 16GB VRAM",
+        "Comparativa AWQ vs GPTQ en RTX 4090",
+        "Cuantización de Flux a 4-bit sin perder calidad"
+      ],
+      "exclusions": [
+        "Modelos sin cuantización explícita"
+      ],
+      "keywords": [
+        "gguf",
+        "awq",
+        "gptq",
+        "exl2",
+        "cuantizado",
+        "quantized",
+        "4-bit",
+        "8-bit"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "huggingface_model",
+          "github_repo"
+        ],
+        "keywords": [
+          "gguf",
+          "awq",
+          "gptq",
+          "quantized"
+        ]
+      },
+      "color_hex": "#312e81",
+      "active": true
+    },
+    {
+      "id": "modelos_sin_censura",
+      "label": "Modelos sin Censura / NSFW",
+      "parent_id": "modelos_ia",
+      "priority": 7,
+      "threshold": 0.88,
+      "description": "Modelos sin censura (uncensored), NSFW, o técnicas para evadir filtros de seguridad. Incluye checkpoints abliterated, LoRAs NSFW y discusiones sobre libertad creativa en IA.",
+      "examples": [
+        "Modelo abliterated de Llama 3 sin rechazos",
+        "LoRA NSFW para SDXL en Civitai",
+        "Cómo desactivar filtros de seguridad en Flux"
+      ],
+      "exclusions": [
+        "Modelos estándar sin componente NSFW o sin censura"
+      ],
+      "keywords": [
+        "uncensored",
+        "nsfw",
+        "abliterated",
+        "sin censura",
+        "unfiltered"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "huggingface_model",
+          "civitai_lora"
+        ],
+        "keywords": [
+          "uncensored",
+          "nsfw",
+          "abliterated"
+        ]
+      },
+      "color_hex": "#1e1b4b",
+      "active": true
+    },
+    {
+      "id": "agentes_ia",
+      "label": "Agentes de IA",
+      "parent_id": "ia",
+      "priority": 18,
+      "threshold": 0.82,
+      "is_family": true,
+      "description": "Familia de categorías sobre agentes autónomos de IA: Claude, Codex, Gemini, Antigravity y frameworks genéricos de agentes. Incluye herramientas de coding asistido, MCP y automatización.",
+      "examples": [
+        "Claude Code resuelve un bug complejo en 3 minutos",
+        "Comparativa de agentes para automatización de tareas"
+      ],
+      "exclusions": [],
+      "keywords": [
+        "agente",
+        "agent",
+        "autonomous",
+        "mcp"
+      ],
+      "boosters": {
+        "reproducible_assets": [],
+        "keywords": []
+      },
+      "color_hex": "#0ea5e9",
+      "active": true
+    },
+    {
+      "id": "agente_claude",
+      "label": "Claude (Anthropic)",
+      "parent_id": "agentes_ia",
+      "priority": 4,
+      "threshold": 0.87,
+      "description": "Contenido específico sobre Claude de Anthropic: Claude Code, Claude Desktop, MCP servers, Artifacts, Projects, y flujos de trabajo con la familia Claude. Debe mencionar Claude explícitamente.",
+      "examples": [
+        "Claude Code refactoriza un proyecto entero en una sesión",
+        "Configurar un MCP server para Claude Desktop",
+        "Comparativa de Claude Sonnet vs Opus para coding"
+      ],
+      "exclusions": [
+        "Otros agentes sin mención de Claude"
+      ],
+      "keywords": [
+        "claude",
+        "anthropic",
+        "claude code",
+        "mcp",
+        "artifacts"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "claude",
+          "anthropic"
+        ]
+      },
+      "color_hex": "#0284c7",
+      "active": true
+    },
+    {
+      "id": "agente_codex",
+      "label": "Codex / OpenAI Agents",
+      "parent_id": "agentes_ia",
+      "priority": 4,
+      "threshold": 0.87,
+      "description": "Contenido específico sobre Codex, Operator, Deep Research u otros agentes de OpenAI. Incluye flujos de trabajo con la API de OpenAI para agentes.",
+      "examples": [
+        "Codex CLI automatiza tareas de mantenimiento",
+        "Operator navega la web para completar formularios",
+        "Deep Research genera reportes extensos en minutos"
+      ],
+      "exclusions": [
+        "Otros agentes sin mención de OpenAI"
+      ],
+      "keywords": [
+        "codex",
+        "openai",
+        "operator",
+        "deep research",
+        "gpt"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "codex",
+          "openai"
+        ]
+      },
+      "color_hex": "#0891b2",
+      "active": true
+    },
+    {
+      "id": "agente_gemini",
+      "label": "Gemini (Google)",
+      "parent_id": "agentes_ia",
+      "priority": 4,
+      "threshold": 0.87,
+      "description": "Contenido específico sobre Gemini de Google: Gemini CLI, Gemini Code Assist, Vertex AI Agents y flujos de trabajo con modelos Gemini.",
+      "examples": [
+        "Gemini CLI con contexto de 1M de tokens",
+        "Gemini 2.5 Pro resuelve problemas de matemáticas avanzadas"
+      ],
+      "exclusions": [
+        "Otros agentes sin mención de Gemini"
+      ],
+      "keywords": [
+        "gemini",
+        "google",
+        "vertex ai",
+        "gemini cli"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "gemini",
+          "google"
+        ]
+      },
+      "color_hex": "#0d9488",
+      "active": true
+    },
+    {
+      "id": "agente_antigravity",
+      "label": "Antigravity y otros agentes",
+      "parent_id": "agentes_ia",
+      "priority": 5,
+      "threshold": 0.85,
+      "description": "Contenido sobre Antigravity de Google u otros agentes de IA emergentes: Devin, Cursor Agent, Windsurf, Aider, y frameworks de agentes como LangGraph, CrewAI o AutoGen.",
+      "examples": [
+        "Antigravity de Google para desarrollo autónomo",
+        "CrewAI orquesta múltiples agentes para research",
+        "Aider como agente de coding en terminal"
+      ],
+      "exclusions": [
+        "Claude, Codex o Gemini sin mención de otros agentes"
+      ],
+      "keywords": [
+        "antigravity",
+        "devin",
+        "cursor",
+        "windsurf",
+        "aider",
+        "langgraph",
+        "crewai",
+        "autogen"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "antigravity",
+          "agent framework"
+        ]
+      },
+      "color_hex": "#14b8a6",
+      "active": true
+    },
+    {
+      "id": "herramientas_ia",
+      "label": "Herramientas de IA (General)",
+      "parent_id": "ia",
+      "priority": 22,
+      "threshold": 0.78,
+      "description": "Herramientas, aplicaciones o servicios de IA que no encajan en generación o agentes: chatbots, asistentes, plataformas de productividad, extensiones de navegador con IA y utilidades varias.",
+      "examples": [
+        "Extensión de Chrome que resume artículos con IA",
+        "App de notas con IA integrada para developers",
+        "Servicio de transcripción con Whisper en la nube"
+      ],
+      "exclusions": [
+        "Herramientas específicas de generación o agentes (usar subcategorías)"
+      ],
+      "keywords": [
+        "herramienta",
+        "tool",
+        "app",
+        "asistente",
+        "chatbot"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "tool",
+          "app"
+        ]
+      },
+      "color_hex": "#06b6d4",
+      "active": true
+    },
+    {
+      "id": "modelado_3d",
+      "label": "Modelado 3D General",
+      "parent_id": null,
+      "priority": 30,
+      "threshold": 0.78,
+      "is_family": true,
+      "description": "Gráficos por computadora 3D, WebGL, WebGPU, Three.js, shaders, renderizado interactivo y aplicaciones 3D que no son exclusivas de Blender ni de generación IA.",
+      "examples": [
+        "Herramienta interactiva de cámara en Three.js con WebGL",
+        "Shader GLSL de refracción en navegador",
+        "Escena procedural en Spline o Cinema4D"
+      ],
+      "exclusions": [
+        "Proyectos exclusivos de Blender (usar blender)",
+        "Generación 3D con IA (usar gen_3d)"
+      ],
+      "keywords": [
+        "threejs",
+        "webgl",
+        "webgpu",
+        "shader",
+        "glsl",
+        "3d",
+        "spline",
+        "render"
+      ],
+      "boosters": {
+        "reproducible_assets": [],
+        "keywords": []
+      },
+      "color_hex": "#0284c7",
+      "active": true
+    },
+    {
+      "id": "blender",
+      "label": "Blender 3D",
+      "parent_id": "modelado_3d",
+      "priority": 5,
+      "threshold": 0.85,
+      "description": "Tutoriales, proyectos, plugins, rigs o herramientas específicas para Blender 3D. Incluye geometry nodes, addons, renderizado con Cycles o Eevee, pipelines de animación, rigging, y scripts en Python para Blender.",
+      "examples": [
+        "Motion2MixamoRig copia movimiento de una persona a un personaje Mixamo en Blender",
+        "Shader procedural de agua en Cycles con geometry nodes en Blender 4.2",
+        "Nuevo addon en Python para rigging en Blender"
+      ],
+      "exclusions": [
+        "Modelado exclusivo en Maya, 3ds Max o ZBrush sin mención de Blender"
+      ],
+      "keywords": [
+        "blender",
+        "cycles",
+        "eevee",
+        "geometry nodes",
+        "mixamo",
+        "rig",
+        "addon"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "installation_guide",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "blender",
+          "geometry nodes"
+        ]
+      },
+      "color_hex": "#ea580c",
+      "active": true
+    },
+    {
+      "id": "blender_addons",
+      "label": "Addons y Herramientas de Blender",
+      "parent_id": "blender",
+      "priority": 3,
+      "threshold": 0.88,
+      "description": "Addons, plugins, herramientas o repositorios específicos para Blender. Incluye enlaces a GitHub, Gumroad o Blender Market, y guías de instalación de los mismos.",
+      "examples": [
+        "Motion2MixamoRig: addon para copiar movimiento a personajes Mixamo",
+        "Addon de retopología automática para Blender 4.x",
+        "Plugin de importación de modelos Trellis a Blender"
+      ],
+      "exclusions": [
+        "Tutoriales de Blender sin componente de addon o herramienta"
+      ],
+      "keywords": [
+        "addon",
+        "plugin",
+        "blender",
+        "github",
+        "tool"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "installation_guide"
+        ],
+        "keywords": [
+          "addon",
+          "plugin"
+        ]
+      },
+      "color_hex": "#c2410c",
+      "active": true
+    },
+    {
+      "id": "blender_tutoriales",
+      "label": "Tutoriales y Guías de Blender",
+      "parent_id": "blender",
+      "priority": 4,
+      "threshold": 0.85,
+      "description": "Tutoriales, guías paso a paso, cursos y explicaciones sobre técnicas específicas de Blender: modelado, escultura, animación, simulación, shading y render.",
+      "examples": [
+        "Tutorial de geometry nodes para generar vegetación procedural",
+        "Guía completa de rigging en Blender 4.2",
+        "Cómo hacer simulaciones de tela en Blender"
+      ],
+      "exclusions": [
+        "Anuncios de addons sin componente tutorial"
+      ],
+      "keywords": [
+        "tutorial",
+        "guia",
+        "blender",
+        "curso",
+        "aprender"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "tutorial_link",
+          "installation_guide"
+        ],
+        "keywords": [
+          "tutorial",
+          "guia"
+        ]
+      },
+      "color_hex": "#9a3412",
+      "active": true
+    },
+    {
+      "id": "blender_dev",
+      "label": "Desarrollo y Repositorios de Blender",
+      "parent_id": "blender",
+      "priority": 4,
+      "threshold": 0.88,
+      "description": "Desarrollo de herramientas para Blender, repositorios en GitHub, scripts en Python para Blender, desarrollo de addons propios y contribuciones al ecosistema.",
+      "examples": [
+        "Nuevo repositorio en GitHub con scripts para Blender",
+        "Desarrollo de un addon de importación de modelos IA",
+        "Script en Python para automatizar tareas en Blender"
+      ],
+      "exclusions": [
+        "Uso de Blender sin desarrollo propio"
+      ],
+      "keywords": [
+        "github",
+        "repo",
+        "blender",
+        "python",
+        "script",
+        "development"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo"
+        ],
+        "keywords": [
+          "github",
+          "repo",
+          "script"
+        ]
+      },
+      "color_hex": "#7c2d12",
+      "active": true
+    },
+    {
+      "id": "threejs_webgl",
+      "label": "Three.js, WebGL y WebGPU",
+      "parent_id": "modelado_3d",
+      "priority": 8,
+      "threshold": 0.83,
+      "description": "Desarrollo 3D en navegador con Three.js, WebGL, WebGPU, Babylon.js, shaders GLSL/HLSL, y aplicaciones interactivas 3D web.",
+      "examples": [
+        "Herramienta interactiva de cámara en Three.js",
+        "Shader GLSL de refracción en navegador",
+        "Demo de WebGPU con partículas en tiempo real"
+      ],
+      "exclusions": [
+        "Modelado 3D offline en software de escritorio"
+      ],
+      "keywords": [
+        "threejs",
+        "webgl",
+        "webgpu",
+        "babylonjs",
+        "glsl",
+        "shader"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "threejs",
+          "webgl",
+          "webgpu"
+        ]
+      },
+      "color_hex": "#0369a1",
+      "active": true
+    },
+    {
+      "id": "motion_design_vfx",
+      "label": "Motion Design, VFX y Spline 3D",
+      "parent_id": "modelado_3d",
+      "priority": 9,
+      "threshold": 0.82,
+      "description": "Animación 3D para producto, motion graphics, Spline 3D interactivo, Cinema4D, simulación de fluidos/partículas, renderizado abstracto y efectos visuales comerciales.",
+      "examples": [
+        "Animación interactiva de landing page creada con Spline 3D",
+        "Renders de producto en Cinema4D con Octane render",
+        "Simulación de telas y branding animado en 3D"
+      ],
+      "exclusions": [
+        "Animaciones para videojuegos (usar juegos o devplays)"
+      ],
+      "keywords": [
+        "spline",
+        "cinema4d",
+        "octane",
+        "motion design",
+        "vfx",
+        "simulation"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "tutorial_link",
+          "github_repo"
+        ],
+        "keywords": [
+          "spline",
+          "motion design",
+          "vfx"
+        ]
+      },
+      "color_hex": "#0284c7",
+      "active": true
+    },
+    {
+      "id": "otros_3d",
+      "label": "Otros Softwares 3D",
+      "parent_id": "modelado_3d",
+      "priority": 10,
+      "threshold": 0.8,
+      "description": "Otros softwares de modelado 3D no cubiertos: Maya, 3ds Max, ZBrush, Houdini, Substance Painter, Marvelous Designer, y pipelines específicos de estos.",
+      "examples": [
+        "Técnicas de escultura en ZBrush para personajes",
+        "Simulación de tela en Marvelous Designer",
+        "Pipeline Houdini para efectos procedurales"
+      ],
+      "exclusions": [
+        "Blender (usar blender)"
+      ],
+      "keywords": [
+        "maya",
+        "3ds max",
+        "zbrush",
+        "houdini",
+        "substance"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "tutorial_link"
+        ],
+        "keywords": [
+          "zbrush",
+          "maya",
+          "houdini"
+        ]
+      },
+      "color_hex": "#075985",
+      "active": true
+    },
+    {
+      "id": "juegos",
+      "label": "Desarrollo de Videojuegos",
+      "parent_id": null,
+      "priority": 20,
+      "threshold": 0.8,
+      "is_family": true,
+      "description": "Diseño y programación de videojuegos, mecánicas jugables, herramientas de gamedev, motores interactivos y demostraciones de playtesting. Familia que agrupa motores específicos y desarrollo indie.",
+      "examples": [
+        "Mecánica de combate y colisiones en Godot 4",
+        "Playtest de prototipo indie con feedback de movimiento"
+      ],
+      "exclusions": [
+        "Solo animaciones 3D aisladas sin componente jugable"
+      ],
+      "keywords": [
+        "gamedev",
+        "indiedev",
+        "gameplay",
+        "playtest",
+        "game engine"
+      ],
+      "boosters": {
+        "reproducible_assets": [],
+        "keywords": []
+      },
+      "color_hex": "#d946ef",
+      "active": true
+    },
+    {
+      "id": "unity",
+      "label": "Unity Engine",
+      "parent_id": "juegos",
+      "priority": 5,
+      "threshold": 0.88,
+      "description": "Desarrollo específico con Unity Engine, C#, packages de Unity, Universal Render Pipeline (URP), High Definition Render Pipeline (HDRP) y shaders en Unity.",
+      "examples": [
+        "Optimización de draw calls en Unity URP con Shader Graph",
+        "Package de inventario para Unity en GitHub"
+      ],
+      "exclusions": [
+        "Proyectos en Unreal Engine o Godot"
+      ],
+      "keywords": [
+        "unity",
+        "unity3d",
+        "urp",
+        "hdrp",
+        "c#"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "unity",
+          "urp",
+          "hdrp"
+        ]
+      },
+      "color_hex": "#475569",
+      "active": true
+    },
+    {
+      "id": "unreal",
+      "label": "Unreal Engine",
+      "parent_id": "juegos",
+      "priority": 5,
+      "threshold": 0.88,
+      "description": "Desarrollo específico con Unreal Engine, Blueprints, C++, Nanite, Lumen, Chaos Physics y assets de Fab / Unreal Marketplace.",
+      "examples": [
+        "Iluminación dinámica con Lumen en Unreal Engine 5.5",
+        "Sistema de partículas Niagara para habilidades mágicas"
+      ],
+      "exclusions": [
+        "Proyectos en Unity o Godot"
+      ],
+      "keywords": [
+        "unreal",
+        "ue5",
+        "unreal engine",
+        "blueprints",
+        "nanite",
+        "lumen"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "unreal",
+          "ue5",
+          "nanite",
+          "lumen"
+        ]
+      },
+      "color_hex": "#0f172a",
+      "active": true
+    },
+    {
+      "id": "godot",
+      "label": "Godot Engine",
+      "parent_id": "juegos",
+      "priority": 5,
+      "threshold": 0.88,
+      "description": "Desarrollo específico con Godot Engine: GDScript, C#, nodos, shaders en Godot, y proyectos open source en Godot.",
+      "examples": [
+        "Sistema de inventario en Godot 4 con GDScript",
+        "Shader de agua en Godot 4.3",
+        "Proyecto open source en Godot para plataformas 2D"
+      ],
+      "exclusions": [
+        "Proyectos en Unity o Unreal"
+      ],
+      "keywords": [
+        "godot",
+        "gdscript",
+        "godot engine"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "godot",
+          "gdscript"
+        ]
+      },
+      "color_hex": "#1e40af",
+      "active": true
+    },
+    {
+      "id": "indie_dev",
+      "label": "Desarrollo Indie y Devlogs",
+      "parent_id": "juegos",
+      "priority": 8,
+      "threshold": 0.8,
+      "description": "Desarrolladores solos, equipos indie, devlogs, demos de prototipos, Build in Public de videojuegos, y posts sobre el proceso de desarrollo de juegos independientes.",
+      "examples": [
+        "Mi devlog semanal de un juego de plataformas en Godot",
+        "Prototipo de mecánica de dash en 48 horas",
+        "Solo dev: cómo lancé mi primer juego en Steam"
+      ],
+      "exclusions": [
+        "Anuncios de juegos AAA sin componente indie"
+      ],
+      "keywords": [
+        "indiedev",
+        "solo dev",
+        "devlog",
+        "prototype",
+        "indie game"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "indiedev",
+          "devlog",
+          "solo dev"
+        ]
+      },
+      "color_hex": "#a21caf",
+      "active": true
+    },
+    {
+      "id": "assets_gamedev",
+      "label": "Assets para Game Dev",
+      "parent_id": "juegos",
+      "priority": 9,
+      "threshold": 0.82,
+      "description": "Packs de assets, sprites, modelos, texturas, sonidos, música o herramientas listas para usar en motores de juego. Incluye enlaces a itch.io, Unity Asset Store, Fab o repositorios.",
+      "examples": [
+        "Pack de sprites pixel art gratis en itch.io",
+        "Colección de sonidos UI para juegos en Fab",
+        "Assets de personajes low-poly para Unity"
+      ],
+      "exclusions": [
+        "Assets específicos de un motor sin ser reutilizables"
+      ],
+      "keywords": [
+        "assets",
+        "sprites",
+        "pack",
+        "itch.io",
+        "fab",
+        "unity asset store"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "assets",
+          "pack",
+          "free"
+        ]
+      },
+      "color_hex": "#7e22ce",
+      "active": true
+    },
+    {
+      "id": "lanzamientos_juegos",
+      "label": "Lanzamientos de Juegos",
+      "parent_id": "juegos",
+      "priority": 10,
+      "threshold": 0.82,
+      "description": "Anuncios de lanzamiento de videojuegos, fechas de salida, trailers de lanzamiento, disponibilidad en plataformas (Steam, Epic, consolas) y lanzamientos en Early Access.",
+      "examples": [
+        "Mi juego sale en Steam el próximo viernes",
+        "Trailer de lanzamiento de un juego indie en Switch",
+        "Early Access disponible hoy"
+      ],
+      "exclusions": [
+        "Devlogs sin anuncio de lanzamiento"
+      ],
+      "keywords": [
+        "lanzamiento",
+        "launch",
+        "steam",
+        "trailer",
+        "release"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "tutorial_link"
+        ],
+        "keywords": [
+          "lanzamiento",
+          "launch",
+          "steam"
+        ]
+      },
+      "color_hex": "#6b21a8",
+      "active": true
+    },
+    {
+      "id": "dev_tools",
+      "label": "Herramientas de Desarrollo y Programación",
+      "parent_id": null,
+      "priority": 25,
+      "threshold": 0.8,
+      "is_family": true,
+      "description": "Librerías de programación, frameworks, herramientas de terminal, CLI, bases de datos, APIs y utilidades para ingenieros de software.",
+      "examples": [
+        "Nueva CLI en Rust para formatear archivos a gran velocidad",
+        "Herramienta de depuración y testing para microservicios"
+      ],
+      "exclusions": [
+        "Herramientas exclusivas de modelado 3D o motores de videojuegos"
+      ],
+      "keywords": [
+        "developer tools",
+        "cli",
+        "library",
+        "api",
+        "framework",
+        "coding"
+      ],
+      "boosters": {
+        "reproducible_assets": [],
+        "keywords": []
+      },
+      "color_hex": "#10b981",
+      "active": true
+    },
+    {
+      "id": "frontend_ui_motion",
+      "label": "Frontend, UI Engineering y Motion Web",
+      "parent_id": "dev_tools",
+      "priority": 8,
+      "threshold": 0.82,
+      "description": "Ingeniería de interfaces web: React, Next.js, Vue, Svelte, Tailwind CSS, animaciones con Framer Motion o GSAP, microinteracciones, diseño interactivo, accesibilidad y componentes UI de alto nivel.",
+      "examples": [
+        "Componente modal con animaciones fluidas usando Tailwind y Framer Motion",
+        "Efecto de cursor interactivo y microinteracciones en Svelte 5",
+        "Nueva librería de componentes headless accesibles para React"
+      ],
+      "exclusions": [
+        "Bases de datos o backend puro (usar backend_infra_cli)"
+      ],
+      "keywords": [
+        "frontend",
+        "ui",
+        "ux",
+        "tailwind",
+        "react",
+        "framer motion",
+        "gsap",
+        "css",
+        "svelte",
+        "nextjs"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "frontend",
+          "tailwind",
+          "ui",
+          "motion",
+          "css"
+        ]
+      },
+      "color_hex": "#059669",
+      "active": true
+    },
+    {
+      "id": "backend_infra_cli",
+      "label": "Backend, CLI e Infraestructura",
+      "parent_id": "dev_tools",
+      "priority": 9,
+      "threshold": 0.82,
+      "description": "Desarrollo de backend, terminales CLI, lenguajes de sistemas (Rust, Go, Python), bases de datos (PostgreSQL, SQLite, DuckDB, Redis), Docker, networking y arquitecturas de alto rendimiento.",
+      "examples": [
+        "Nueva herramienta CLI escrita en Rust para monitorear logs en tiempo real",
+        "Optimizando consultas en DuckDB para analítica de millones de filas",
+        "Microservicio en Go con gRPC que procesa 100K peticiones por segundo"
+      ],
+      "exclusions": [
+        "Diseño visual de interfaces o CSS (usar frontend_ui_motion)"
+      ],
+      "keywords": [
+        "backend",
+        "cli",
+        "rust",
+        "golang",
+        "postgres",
+        "sqlite",
+        "docker",
+        "api",
+        "grpc"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "github_repo",
+          "tutorial_link"
+        ],
+        "keywords": [
+          "cli",
+          "rust",
+          "backend",
+          "database",
+          "docker"
+        ]
+      },
+      "color_hex": "#047857",
+      "active": true
+    },
+    {
+      "id": "mangas",
+      "label": "Manga, Anime e Ilustración Artística",
+      "parent_id": null,
+      "priority": 40,
+      "threshold": 0.8,
+      "is_family": true,
+      "description": "Manga, webcomics, ilustración artística tradicional o digital de personajes, paneles secuenciales, narrativa gráfica y arte visual oriental (SFW o afín).",
+      "examples": [
+        "Ilustración digital o boceto de personaje",
+        "Página de webtoon dibujada en Clip Studio Paint"
+      ],
+      "exclusions": [
+        "Tutoriales puramente de software 3D o discusiones de negocios sin arte visual"
+      ],
+      "keywords": [
+        "manga",
+        "anime",
+        "webcomic",
+        "illustration",
+        "art",
+        "clip studio",
+        "sfw"
+      ],
+      "boosters": {
+        "reproducible_assets": [],
+        "keywords": []
+      },
+      "color_hex": "#f43f5e",
+      "active": true
+    },
+    {
+      "id": "webcomic_manga_serial",
+      "label": "Manga Serializado y Webcomics Multipágina",
+      "parent_id": "mangas",
+      "priority": 6,
+      "threshold": 0.83,
+      "description": "Historias ilustradas en secuencia, tiras cómicas numeradas (ej. 1/6, 1/4), webtoons, viñetas de humor cotidiano y series manga publicadas por capítulos o hilos.",
+      "examples": [
+        "突然ウチにやって来た隣人 (1/6)SFW - cómic secuencial de vecino",
+        "Episodio semanal de mi webcomic en hilo de Twitter",
+        "Tira cómica de 4 viñetas (yonkoma) con remate humorístico"
+      ],
+      "exclusions": [
+        "Ilustraciones individuales aisladas sin narrativa secuencial (usar fanart_anime)"
+      ],
+      "keywords": [
+        "webcomic",
+        "comic",
+        "manga",
+        "tira comica",
+        "serial",
+        "1/4",
+        "1/6",
+        "story"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "tutorial_link"
+        ],
+        "keywords": [
+          "webcomic",
+          "comic",
+          "manga",
+          "ep"
+        ]
+      },
+      "color_hex": "#e11d48",
+      "active": true
+    },
+    {
+      "id": "fanart_anime",
+      "label": "Fanart, Ilustración de Personajes y VTubers",
+      "parent_id": "mangas",
+      "priority": 7,
+      "threshold": 0.82,
+      "description": "Ilustraciones estáticas, fanarts de series de anime populares, videojuegos o VTubers (Hololive, Nijisanji), comisiones de dibujo y hojas de diseño de personajes (character sheets).",
+      "examples": [
+        "Fanart terminado de Frieren pintado en Clip Studio Paint",
+        "Ilustración comisionada para una VTuber independiente",
+        "Diseño conceptual y paleta de color para mi nuevo personaje original"
+      ],
+      "exclusions": [
+        "Cómics narrativos multipágina (usar webcomic_manga_serial)",
+        "Imágenes generadas con IA (usar gen_imagenes)"
+      ],
+      "keywords": [
+        "fanart",
+        "character design",
+        "vtuber",
+        "anime art",
+        "illustration",
+        "drawing"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "tutorial_link"
+        ],
+        "keywords": [
+          "fanart",
+          "vtuber",
+          "character"
+        ]
+      },
+      "color_hex": "#be123c",
+      "active": true
+    },
+    {
+      "id": "negocios_saas",
+      "label": "Métricas de Negocio y SaaS",
+      "parent_id": null,
+      "priority": 35,
+      "threshold": 0.82,
+      "description": "Emprendimiento digital, micro-SaaS, facturación, MRR, monetización, estrategias de conversión, capturas de Stripe y crecimiento de usuarios.",
+      "examples": [
+        "Llegamos a $10K MRR con nuestra herramienta de scraping en 6 meses",
+        "Estrategia de pricing que duplicó el ticket promedio en nuestro SaaS",
+        "Métricas de retención de cohortes del Q3"
+      ],
+      "exclusions": [
+        "Publicaciones de código técnico sin métricas comerciales"
+      ],
+      "keywords": [
+        "mrr",
+        "arr",
+        "saas",
+        "stripe",
+        "revenue",
+        "bootstrap",
+        "pricing",
+        "users"
+      ],
+      "boosters": {
+        "reproducible_assets": [
+          "tutorial_link"
+        ],
+        "keywords": [
+          "mrr",
+          "saas",
+          "stripe"
+        ]
+      },
+      "color_hex": "#059669",
+      "active": true
+    },
+    {
+      "id": "otros",
+      "label": "Otros y Fallback",
+      "parent_id": null,
+      "priority": 9999,
+      "threshold": 0.0,
+      "description": "Publicaciones personales, reflexiones cotidianas, noticias generales o contenido ambiguo donde la confianza del modelo es insuficiente para una asignación específica.",
+      "examples": [
+        "Buen día a todos, tomándome un café antes de empezar",
+        "Opinión sobre el clima de hoy",
+        "Foto de mi escritorio de trabajo"
+      ],
+      "exclusions": [],
+      "keywords": [],
+      "boosters": {
+        "reproducible_assets": [],
+        "keywords": []
+      },
+      "color_hex": "#64748b",
+      "active": true
+    },
+    {
+      "id": "vfx_compositing",
+      "label": "VFX Compositing",
+      "parent_id": "modelado_3d",
+      "priority": 30,
+      "threshold": 0.75,
+      "description": "Categoría temática VFX Compositing creada desde el Dashboard.",
+      "examples": [
+        "nuke",
+        "fusion",
+        "compositing"
+      ],
+      "exclusions": [],
+      "keywords": [
+        "nuke",
+        "fusion",
+        "compositing",
+        "after effects"
+      ],
+      "boosters": {
+        "reproducible_assets": [],
+        "keywords": [
+          "nuke",
+          "fusion",
+          "compositing",
+          "after effects"
+        ]
+      },
+      "color_hex": "#14b8a6",
+      "code": "VFX",
+      "active": true
+    }
+  ],
+  "decision_rules": {
+    "multi_label_selection": [
+      "1. Ejecutar Jev/Laya con la pregunta de choice multi-selección sobre TODAS las categorías activas.",
+      "2. Filtrar categorías con confidence >= threshold_efectivo (propio, heredado o default).",
+      "3. Aplicar boosters deterministas: si el texto incluye enlaces a dominios de 'asset_domain_matchers', sumar el bonus correspondiente.",
+      "4. Ordenar por boosted_score descendente.",
+      "5. Tomar hasta 'max_labels_per_post' categorías (default 4).",
+      "6. Si la lista queda vacía -> Asignar fallback 'otros' + estado PENDING."
+    ],
+    "primary_category_selection": [
+      "1. De las categorías válidas (con boosted_score), elegir la de mayor boosted_score.",
+      "2. Si empate -> ordenar por priority numéricamente menor (más específica gana).",
+      "3. Si persiste empate -> ordenar por confidence devuelta.",
+      "4. Si persiste empate -> desempate alfabético por ID.",
+      "5. La categoría primaria se guarda en 'primary_category'; las demás en 'secondary_categories'."
+    ],
+    "tie_breaker": [
+      "1. priority (menor gana)",
+      "2. boosted_score (mayor gana)",
+      "3. confidence (mayor gana)",
+      "4. id alfabético (determinismo)"
+    ],
+    "threshold_inheritance": "C.threshold ?? C.parent.threshold ?? C.parent.parent.threshold ?? global_settings.default_threshold",
+    "boosted_score_formula": "confidence + asset_bonus + specificity_bonus + keyword_bonus",
+    "fallback_chain": [
+      "1. Si multi_label devuelve [] -> 'otros'",
+      "2. Si todos los scores < min_confidence_abstain -> 'otros' + PENDING",
+      "3. Si error de Jev/Laya -> 'otros' + RETRY"
+    ]
+  }
+}

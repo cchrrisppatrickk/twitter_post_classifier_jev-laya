@@ -1,0 +1,140 @@
+<!-- BARRA PRINCIPAL DE ANÁLISIS DE X CON MOTOR LAYA SYSTEM 1 & CONTROLES -->
+<div class="bg-white rounded-xl p-3 sm:p-4 border border-app-border shadow-xs space-y-2.5">
+  <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+    <div class="relative flex-1 flex items-center">
+      <i class="fa-solid fa-link absolute left-3 text-stone-400 text-xs"></i>
+      <input 
+        type="text" 
+        id="targetPostUrl"
+        placeholder="Escribe o pega texto de tweet, URL o JSON para clasificar con Laya AI..." 
+        class="w-full pl-8 pr-3 py-2 bg-stone-50 border border-stone-300 rounded-lg text-xs font-mono text-stone-800 focus:outline-none focus:border-stone-600 focus:bg-white transition"
+      />
+    </div>
+
+    <div class="flex items-center gap-2">
+      <!-- Botón Start / Analizar -->
+      <button 
+        id="runAiClassificationBtn"
+        class="flex items-center justify-center gap-2 px-5 py-2 bg-gradient-to-r from-stone-800 via-stone-900 to-black hover:from-black hover:to-stone-900 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow transition active:scale-95"
+      >
+        <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-xs"></i>
+        <span class="font-mono">Start</span>
+      </button>
+
+      <!-- Botón para Ingesta JSON o Meridian Scraper -->
+      <button 
+        id="openIngestModalBtn"
+        class="px-3 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold rounded-lg border border-stone-200 transition"
+        title="Importar un archivo JSON personalizado (Meridian / X dump)"
+      >
+        <i class="fa-solid fa-file-import text-stone-600"></i>
+        <span class="hidden sm:inline ml-1 font-mono">JSON</span>
+      </button>
+
+      <!-- Botón para Configuración Taxonómica / Registry Studio -->
+      <a 
+        href="/config"
+        id="openTaxonomyModalBtn"
+        class="px-3 py-2 bg-stone-50 hover:bg-stone-100 text-stone-700 text-xs font-semibold rounded-lg border border-stone-200 transition flex items-center justify-center"
+        title="Configurar Taxonomía y Decisiones de Laya AI (Studio)"
+      >
+        <i class="fa-solid fa-sliders text-emerald-600"></i>
+      </a>
+
+      <!-- Botón de Exportación Multiformato -->
+      <button 
+        id="exportJsonBtn"
+        class="px-3 py-2 bg-stone-50 hover:bg-stone-100 text-stone-700 text-xs font-semibold rounded-lg border border-stone-200 transition"
+        title="Exportar dataset clasificado"
+      >
+        <i class="fa-solid fa-download"></i>
+      </button>
+
+      <!-- Botón Recargar Base de Datos SQLite WAL -->
+      <button 
+        id="reloadDbBtn"
+        class="px-3 py-2 bg-stone-50 hover:bg-emerald-50 text-stone-600 hover:text-emerald-700 text-xs font-semibold rounded-lg border border-stone-200 transition"
+        title="Recargar publicaciones frescas desde SQLite WAL"
+      >
+        <i class="fa-solid fa-rotate"></i>
+      </button>
+
+      <!-- Botón Limpiar Matriz -->
+      <button 
+        id="clearMatrixBtn"
+        class="px-3 py-2 bg-stone-50 hover:bg-rose-50 text-stone-500 hover:text-rose-600 text-xs font-semibold rounded-lg border border-stone-200 transition"
+        title="Limpiar visualización de la Matriz"
+      >
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Subtexto descriptivo del escaneo actual -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-stone-500 font-mono gap-1 pt-1 border-t border-stone-100">
+    <span id="scanStatusSubtitle">Laya System 1 activo · Inferencia en CPU Intel i5 · 48 Categorías en 8 Familias</span>
+    <div class="flex items-center gap-3 text-[10px]">
+      <span class="text-stone-400">Modelo: <strong class="text-stone-700">convaiinnovations/laya</strong></span>
+      <span class="text-stone-400">Categorías: <strong class="text-stone-700">48</strong></span>
+    </div>
+  </div>
+
+  <!-- CAJA DE ANÁLISIS EN VIVO + PROGRESS BAR DUAL -->
+  <div id="liveAnalysisCard" class="mt-2.5 bg-stone-50/90 rounded-xl p-3.5 border border-stone-200/90 space-y-3 font-sans transition-all">
+    
+    <!-- Nivel 1: Post actual bajo análisis y veredicto de clasificación -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 text-xs">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span id="liveScannerBadge" class="px-2 py-0.5 rounded bg-stone-200 text-stone-700 font-bold text-[10px] font-mono uppercase tracking-wider shrink-0 transition-colors">
+          EN ESPERA
+        </span>
+        <span id="livePostAuthor" class="font-bold text-stone-900 shrink-0 font-mono text-xs">@dev_user</span>
+        <span id="livePostSnippet" class="text-stone-500 truncate text-[11px] italic">
+          Pega un post en "JSON" y pulsa "Analizar con Laya AI" para observar cómo se clasifica e inyecta en la Matriz...
+        </span>
+      </div>
+
+      <!-- Etiqueta de destino cuando toma la decisión -->
+      <div class="flex items-center gap-2 shrink-0 font-mono">
+        <span class="text-[10px] text-stone-400 uppercase font-semibold">Decisión:</span>
+        <span id="liveDecisionTarget" class="px-2.5 py-0.5 rounded bg-stone-200/80 text-stone-600 font-bold text-[11px] transition-all flex items-center gap-1.5 shadow-xs">
+          —
+        </span>
+        <button id="viewAnalysisModalBtn" class="hidden px-2 py-0.5 rounded bg-stone-200 hover:bg-stone-300 text-stone-700 text-[10px] font-semibold transition" title="Ver detalles completos y JSON del análisis">
+          <i class="fa-solid fa-expand text-[9px]"></i> Ver JSON
+        </button>
+        <button id="pauseResumeBatchBtn" class="hidden px-2.5 py-0.5 rounded bg-amber-100 hover:bg-amber-200 text-amber-800 text-[10px] font-semibold transition flex items-center gap-1 shadow-xs" title="Pausar o reanudar el análisis del lote">
+          <i id="pauseResumeIcon" class="fa-solid fa-pause text-[9px]"></i>
+          <span id="pauseResumeText">Pausar</span>
+        </button>
+        <button id="cancelBatchBtn" class="hidden px-2.5 py-0.5 rounded bg-rose-100 hover:bg-rose-200 text-rose-700 text-[10px] font-semibold transition flex items-center gap-1 shadow-xs" title="Detener definitivamente el procesamiento del lote">
+          <i class="fa-solid fa-stop text-[9px]"></i>
+          <span>Detener</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Nivel 2: Micro-Progress Bar del Post Individual (Analizando -> Clasificando) -->
+    <div class="space-y-1">
+      <div class="flex justify-between items-center text-[10px] font-mono text-stone-500">
+        <span id="singlePostStageText">Etapa del post: Listo para analizar tokens y estructura semántica</span>
+        <span id="singlePostPercent" class="font-bold text-stone-700">0%</span>
+      </div>
+      <div class="w-full bg-stone-200/80 h-1.5 rounded-full overflow-hidden">
+        <div id="singlePostProgressBar" class="bg-amber-500 h-full w-0 transition-all duration-100 rounded-full"></div>
+      </div>
+    </div>
+
+    <!-- Nivel 3: Progress Bar Global del Lote -->
+    <div class="space-y-1 pt-1 border-t border-stone-200/60">
+      <div class="flex justify-between items-center text-[10px] font-mono text-stone-500">
+        <span id="batchProgressLabel">Progreso total del lote clasificado</span>
+        <span id="batchProgressPercent" class="font-bold text-emerald-700">0% (0/0)</span>
+      </div>
+      <div class="w-full bg-stone-200 h-2 rounded-full overflow-hidden">
+        <div id="batchProgressBar" class="bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 h-full w-0 transition-all duration-150 rounded-full"></div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,196 @@
+<!-- MODAL: Ingesta de JSON Scraping -->
+<div id="ingestModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-stone-200 space-y-4">
+    <div class="flex items-center justify-between pb-2 border-b border-stone-100">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-file-code text-emerald-600"></i>
+        <h3 class="font-bold text-sm text-stone-900 font-mono">Ingestar Datos de Scraping (JSON)</h3>
+      </div>
+      <button id="closeIngestModalBtn" class="text-stone-400 hover:text-stone-600">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="space-y-3 text-xs">
+      <p class="text-stone-600 text-[11px]">
+        Sube tu archivo de scraping o pega el array de objetos JSON con publicaciones de Twitter/X. El esquema soporta campos estándar como <code class="bg-stone-100 px-1 py-0.5 rounded text-stone-800 font-mono">id</code>, <code class="bg-stone-100 px-1 py-0.5 rounded text-stone-800 font-mono">text</code>, <code class="bg-stone-100 px-1 py-0.5 rounded text-stone-800 font-mono">likes</code>, <code class="bg-stone-100 px-1 py-0.5 rounded text-stone-800 font-mono">retweets</code>.
+      </p>
+
+      <div>
+        <label class="block text-stone-700 font-mono text-[11px] mb-1 font-semibold">1. Subir archivo JSON (Meridian / Scraping):</label>
+        <input 
+          type="file" 
+          id="jsonFileInput" 
+          accept=".json,application/json"
+          class="w-full text-xs text-stone-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200 cursor-pointer"
+        />
+      </div>
+
+      <!-- Tarjeta de archivo seleccionado (Meridian / JSON) -->
+      <div id="fileInfoCard" class="hidden p-3 bg-emerald-50/90 border border-emerald-200 rounded-xl space-y-1.5 font-mono text-xs">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-emerald-900 flex items-center gap-1.5">
+            <i class="fa-solid fa-file-circle-check text-emerald-600"></i>
+            <span id="fileInfoName">archivo.json</span>
+          </span>
+          <span id="fileInfoSize" class="text-[10px] text-emerald-700 font-semibold px-2 py-0.5 rounded bg-emerald-100">0 KB</span>
+        </div>
+        <div class="flex items-center gap-3 text-[11px] text-emerald-800">
+          <span>Posts listos: <strong id="fileInfoPostsCount" class="font-bold">0</strong></span>
+          <span id="fileInfoEngine" class="text-stone-500">Motor: meridian_twitter_scraper_v2</span>
+        </div>
+        <div id="fileQueueBadgeContainer" class="flex flex-wrap items-center gap-2 pt-1 border-t border-emerald-200/60 text-[10px]">
+          <span class="px-2 py-0.5 rounded bg-emerald-100/80 text-emerald-900 font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-list-check text-emerald-600"></i>
+            Total: <strong id="queueTotalCount" class="font-bold">0</strong>
+          </span>
+          <span class="px-2 py-0.5 rounded bg-stone-200/80 text-stone-700 font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-database text-stone-600"></i>
+            En BD: <strong id="queueRegisteredCount" class="font-bold">0</strong>
+          </span>
+          <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold flex items-center gap-1">
+            <i class="fa-solid fa-clock-rotate-left text-amber-700"></i>
+            Pendientes: <strong id="queuePendingCount" class="font-bold">0</strong>
+          </span>
+        </div>
+        <button id="clearSelectedFileBtn" type="button" class="text-[10px] text-rose-600 hover:underline flex items-center gap-1 pt-0.5">
+          <i class="fa-solid fa-xmark"></i> Quitar archivo y escribir o pegar texto manual
+        </button>
+      </div>
+
+      <div id="pasteSectionSeparator" class="flex items-center my-1 text-stone-400">
+        <div class="flex-1 border-t border-stone-200"></div>
+        <span class="px-2 text-[10px] font-mono">O PEGAR DIRECTAMENTE</span>
+        <div class="flex-1 border-t border-stone-200"></div>
+      </div>
+
+      <div id="pasteSectionContainer">
+        <label class="block text-stone-700 font-mono text-[11px] mb-1 font-semibold">2. Pegar JSON sin procesar o texto de tweets:</label>
+        <textarea 
+          id="jsonPasteArea" 
+          rows="6" 
+          placeholder='{ "metadata": { "engine": "meridian_twitter_scraper_v2" }, "posts": [ { "tweet_id": "...", "content": "..." } ] }'
+          class="w-full p-2.5 bg-stone-50 border border-stone-300 rounded-lg font-mono text-[11px] focus:outline-none focus:border-stone-600 resize-none text-stone-800"
+        ></textarea>
+      </div>
+
+      <!-- Selector de Límite de Procesamiento (Fase 5.13.1 - Control de Carga / CPU) -->
+      <div id="batchLimitSection" class="p-3 bg-stone-50 border border-stone-200 rounded-xl space-y-2 font-mono">
+        <div class="flex items-center justify-between">
+          <label class="text-[11px] font-bold text-stone-800 flex items-center gap-1.5">
+            <i class="fa-solid fa-gauge-high text-emerald-600"></i>
+            Límite de Procesamiento (Control de CPU):
+          </label>
+          <span id="batchLimitSummaryBadge" class="text-[10px] text-emerald-700 bg-emerald-100 font-bold px-2 py-0.5 rounded">
+            Límite: <span id="batchLimitCurrentCount">5</span> posts
+          </span>
+        </div>
+        <div class="flex items-center gap-2 text-[11px]">
+          <div class="flex items-center gap-1">
+            <button type="button" data-limit="5" class="limit-preset-btn px-2.5 py-1 rounded-lg border border-emerald-600 bg-emerald-50 text-emerald-800 font-bold transition hover:bg-emerald-100">5 posts</button>
+            <button type="button" data-limit="10" class="limit-preset-btn px-2.5 py-1 rounded-lg border border-stone-300 bg-white text-stone-700 transition hover:bg-stone-100">10</button>
+            <button type="button" data-limit="50" class="limit-preset-btn px-2.5 py-1 rounded-lg border border-stone-300 bg-white text-stone-700 transition hover:bg-stone-100">50</button>
+            <button type="button" data-limit="all" class="limit-preset-btn px-2.5 py-1 rounded-lg border border-stone-300 bg-white text-stone-700 transition hover:bg-stone-100">Todos</button>
+          </div>
+          <div class="flex items-center gap-1.5 ml-auto">
+            <span class="text-stone-500 text-[10px]">Manual:</span>
+            <input type="number" id="batchLimitInput" min="1" max="5000" value="5" class="w-16 p-1 text-center bg-white border border-stone-300 rounded font-mono text-[11px] focus:outline-none focus:border-emerald-600">
+          </div>
+        </div>
+        <p id="batchLimitExplanation" class="text-[10px] text-stone-500">
+          Modo inteligente: procesa los próximos posts PENDIENTES sin repetir los ya registrados en la base de datos.
+        </p>
+      </div>
+
+      <!-- Selector de Estrategia para Posts Existentes / Duplicados (Fase 5.12.2) -->
+      <div class="p-3 bg-stone-50 border border-stone-200 rounded-xl space-y-2 font-mono">
+        <div class="flex items-center justify-between">
+          <label class="text-[11px] font-bold text-stone-800 flex items-center gap-1.5">
+            <i class="fa-solid fa-copy text-amber-600"></i>
+            Estrategia ante Posts Existentes (Duplicados):
+          </label>
+          <span class="text-[10px] text-stone-500 bg-stone-200/70 px-1.5 py-0.5 rounded">SQLite WAL</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+          <label class="flex items-start gap-2 p-2 rounded-lg border border-stone-300 bg-white hover:border-amber-400 cursor-pointer transition has-[:checked]:border-amber-600 has-[:checked]:bg-amber-50/50">
+            <input type="radio" name="duplicateStrategy" id="dupStrategySkip" value="skip" checked class="mt-0.5 text-amber-600 focus:ring-amber-500">
+            <div>
+              <span class="font-bold text-stone-900 block">Omitir Inferencia (0 ms CPU)</span>
+              <span class="text-[10px] text-stone-500 leading-tight block">Solo actualiza likes/RTs. Preserva intacta la clasificación previa.</span>
+            </div>
+          </label>
+          <label class="flex items-start gap-2 p-2 rounded-lg border border-stone-300 bg-white hover:border-indigo-400 cursor-pointer transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
+            <input type="radio" name="duplicateStrategy" id="dupStrategyReclassify" value="reclassify" class="mt-0.5 text-indigo-600 focus:ring-indigo-500">
+            <div>
+              <span class="font-bold text-stone-900 block">Re-evaluar con Laya actual</span>
+              <span class="text-[10px] text-stone-500 leading-tight block">Reclasifica con taxonomía actual y archiva historial para auditoría/rollback.</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Selector de Perfil y Preguntas de Inferencia Laya (System 1) -->
+      <div class="p-3 bg-stone-50 border border-stone-200 rounded-xl space-y-2 font-mono">
+        <div class="flex items-center justify-between">
+          <label class="text-[11px] font-bold text-stone-800 flex items-center gap-1.5">
+            <i class="fa-solid fa-brain text-purple-600"></i>
+            Perfil de Inferencia Laya:
+          </label>
+          <span id="activeQuestionsSummaryBadge" class="text-[10px] text-purple-700 bg-purple-100 px-2 py-0.5 rounded font-bold">Completo (Todas)</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+          <label class="flex items-start gap-2 p-2 rounded-lg border border-stone-300 bg-white hover:border-purple-400 cursor-pointer transition has-[:checked]:border-purple-600 has-[:checked]:bg-purple-50/50">
+            <input type="radio" name="questionsProfile" id="profileFull" value="full" checked class="mt-0.5 text-purple-600 focus:ring-purple-500">
+            <div>
+              <span class="font-bold text-stone-900 block">Completo</span>
+              <span class="text-[10px] text-stone-500 leading-tight block">Matriz Waffle + preguntas suplementarias activas.</span>
+            </div>
+          </label>
+          <label class="flex items-start gap-2 p-2 rounded-lg border border-stone-300 bg-white hover:border-emerald-400 cursor-pointer transition has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50/50">
+            <input type="radio" name="questionsProfile" id="profileFast" value="fast" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+            <div>
+              <span class="font-bold text-stone-900 block">Rápido (Waffle)</span>
+              <span class="text-[10px] text-stone-500 leading-tight block">Solo categoría temática. Máxima velocidad en CPU.</span>
+            </div>
+          </label>
+          <label class="flex items-start gap-2 p-2 rounded-lg border border-stone-300 bg-white hover:border-indigo-400 cursor-pointer transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
+            <input type="radio" name="questionsProfile" id="profileCustom" value="custom" class="mt-0.5 text-indigo-600 focus:ring-indigo-500">
+            <div>
+              <span class="font-bold text-stone-900 block">Personalizado</span>
+              <span class="text-[10px] text-stone-500 leading-tight block">Elige exactamente qué preguntas evaluar en este lote.</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- Contenedor colapsable de preguntas para perfil personalizado -->
+        <div id="customQuestionsContainer" class="hidden pt-2 border-t border-stone-200 space-y-1.5 text-[10px]">
+          <span class="text-stone-500 font-semibold block">Preguntas que se incluirán en el forward pass de Laya:</span>
+          <div id="customQuestionsCheckboxList" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-36 overflow-y-auto pr-1">
+            <!-- Rellenado dinámicamente con JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-2 flex items-center justify-between font-mono text-xs">
+      <div class="flex items-center gap-3">
+        <button id="loadSampleInModalBtn" type="button" class="text-emerald-700 hover:underline text-[11px] cursor-pointer">
+          <i class="fa-solid fa-code"></i> Insertar ejemplo en textarea
+        </button>
+        <span class="text-stone-300">|</span>
+        <button id="quickResetDbBtn" type="button" class="text-rose-600 hover:underline text-[11px] flex items-center gap-1 cursor-pointer">
+          <i class="fa-solid fa-trash-can"></i> Reiniciar BD
+        </button>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="cancelIngestBtn" class="px-3.5 py-2 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200 font-semibold transition">
+          Cancelar
+        </button>
+        <button id="analyzeSingleBtn" class="px-5 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-semibold transition flex items-center gap-2 shadow-sm font-mono text-xs">
+          <i class="fa-solid fa-bolt"></i>
+          <span id="analyzeBtnLabel">Analizar con Laya AI</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

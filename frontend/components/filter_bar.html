@@ -1,0 +1,123 @@
+<!-- Filtros de afinidad, interruptor de vistas, densidades, orden y buscador -->
+<div class="mt-3.5 flex flex-wrap items-center justify-between gap-2.5 bg-stone-100/70 p-2 rounded-lg border border-stone-200 text-[11px]">
+  <div class="flex flex-wrap items-center gap-1.5">
+    <span class="text-stone-500 font-semibold mr-1 text-[10px] uppercase tracking-wider">Filtro:</span>
+    <button data-filter="all" class="filter-btn px-2.5 py-1 rounded-md bg-stone-900 text-white font-semibold text-[10px] transition">
+      Todos (<span id="filterAllCount">0</span>)
+    </button>
+    <button data-filter="high" class="filter-btn px-2.5 py-1 rounded-md bg-white border border-stone-200 text-stone-700 font-semibold text-[10px] hover:bg-stone-50 transition flex items-center gap-1">
+      <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Alta (≥70)
+    </button>
+    <button data-filter="mid" class="filter-btn px-2.5 py-1 rounded-md bg-white border border-stone-200 text-stone-700 font-semibold text-[10px] hover:bg-stone-50 transition flex items-center gap-1">
+      <span class="w-2 h-2 rounded-full bg-emerald-300"></span> Media (45-69)
+    </button>
+    <button data-filter="low" class="filter-btn px-2.5 py-1 rounded-md bg-white border border-stone-200 text-stone-700 font-semibold text-[10px] hover:bg-stone-50 transition flex items-center gap-1">
+      <span class="w-2 h-2 rounded-full bg-rose-500"></span> Baja (&lt;45)
+    </button>
+    <button data-filter="hybrid" class="filter-btn px-2.5 py-1 rounded-md bg-white border border-amber-300 text-amber-800 font-semibold text-[10px] hover:bg-amber-50 transition flex items-center gap-1" title="Publicaciones que combinan 2 o más categorías (ej. 60-40)">
+      <i class="fa-solid fa-shapes text-amber-500 text-[9px]"></i>
+      <span>Híbridos (60-40)</span>
+      <span class="bg-amber-200 text-amber-900 px-1 py-0.2 rounded text-[9px]" id="filterHybridCount">0</span>
+    </button>
+
+    <!-- Filtro Especial de Anomalías / Outliers -->
+    <button data-filter="anomaly" class="filter-btn px-2.5 py-1 rounded-md bg-amber-50 border border-amber-400 text-amber-900 font-semibold text-[10px] hover:bg-amber-100 transition flex items-center gap-1" title="Posts con comportamiento atípico: bajo score pero alta viralidad, o alto score con 0 interacción">
+      <i class="fa-solid fa-bolt text-amber-600 text-[9px]"></i>
+      <span>Anomalías</span>
+      <span class="bg-amber-300 text-amber-900 px-1 py-0.2 rounded text-[9px]" id="filterAnomalyCount">0</span>
+    </button>
+
+    <!-- Filtro Especial de PENDING / Revisión Humana -->
+    <button data-filter="pending" class="filter-btn px-2.5 py-1 rounded-md bg-amber-50 border border-amber-300 text-amber-900 font-semibold text-[10px] hover:bg-amber-100 transition flex items-center gap-1" title="Publicaciones en abstención o que requieren desempate humano">
+      <i class="fa-solid fa-hourglass-half text-amber-600 text-[9px]"></i>
+      <span>PENDING</span>
+      <span class="bg-amber-200 text-amber-900 px-1 py-0.2 rounded text-[9px]" id="filterPendingCount">0</span>
+    </button>
+  </div>
+
+  <div class="flex flex-wrap items-center gap-2.5">
+    <!-- Selector de Vistas Pro (Waffle / Scatter Cuadrante / Tabla) -->
+    <div class="flex items-center gap-0.5 bg-white p-0.5 rounded-md border border-stone-200">
+      <button id="viewSwitchWaffleBtn" class="px-2 py-0.5 rounded bg-stone-900 text-white font-mono text-[9px] font-semibold transition flex items-center gap-1" title="Vista Waffle Heatmap (Original)">
+        <i class="fa-solid fa-grip text-[9px]"></i>
+        <span>Waffle</span>
+      </button>
+      <button id="viewSwitchScatterBtn" class="px-2 py-0.5 rounded text-stone-600 hover:text-stone-900 font-mono text-[9px] transition flex items-center gap-1" title="Vista Cuadrante Scatter: Score de Afinidad vs Likes Reales">
+        <i class="fa-solid fa-chart-line text-sky-600 text-[9px]"></i>
+        <span>Cuadrante</span>
+      </button>
+      <button id="viewSwitchTableBtn" class="px-2 py-0.5 rounded text-stone-600 hover:text-stone-900 font-mono text-[9px] transition flex items-center gap-1" title="Vista Tabla Ejecutiva con ordenación por columnas">
+        <i class="fa-solid fa-table-list text-purple-600 text-[9px]"></i>
+        <span>Tabla</span>
+      </button>
+    </div>
+
+    <!-- Selector de Densidad de Celdas (S / M / L) -->
+    <div class="hidden sm:flex items-center gap-1 bg-white p-0.5 rounded border border-stone-200 text-[9px] font-mono">
+      <span class="text-stone-400 px-0.5">DENSIDAD:</span>
+      <button id="densityCompactBtn" class="px-1.5 py-0.5 rounded text-stone-600 hover:bg-stone-100 transition" title="Compacto (8px)">S</button>
+      <button id="densityNormalBtn" class="px-1.5 py-0.5 rounded bg-stone-800 text-white font-bold transition" title="Estándar (11px)">M</button>
+      <button id="densityLargeBtn" class="px-1.5 py-0.5 rounded text-stone-600 hover:bg-stone-100 transition" title="Amplio (16px)">L</button>
+    </div>
+
+    <!-- Selector de Modo de Color de Celdas: Viral / 60-40 Diag / Pie % -->
+    <div class="flex items-center gap-1 bg-white p-0.5 rounded border border-stone-200">
+      <span class="text-[9px] text-stone-400 font-mono px-1">COLOR:</span>
+      <button id="viewModeViralBtn" class="px-2 py-0.5 rounded bg-stone-800 text-white font-mono text-[9px] font-semibold transition" title="Color según score de viralidad/afinidad (Verde/Rojo)">
+        Viral
+      </button>
+      <button id="viewModeSplitDiagBtn" class="px-2 py-0.5 rounded text-stone-600 hover:text-stone-900 font-mono text-[9px] transition flex items-center gap-1" title="División diagonal proporcional 60-40">
+        <i class="fa-solid fa-slash text-amber-600 text-[8px]"></i>
+        <span>60/40</span>
+      </button>
+      <button id="viewModeSplitPieBtn" class="px-2 py-0.5 rounded text-stone-600 hover:text-stone-900 font-mono text-[9px] transition flex items-center gap-1" title="Mini gráfico circular para 2 categorías">
+        <i class="fa-solid fa-chart-pie text-sky-600 text-[8px]"></i>
+        <span>Pie %</span>
+      </button>
+    </div>
+
+    <!-- Selector de Familia Raíz -->
+    <div class="flex items-center gap-1 text-[10px] font-mono text-stone-600">
+      <span>FAMILIA:</span>
+      <select id="familyFilterSelect" class="bg-white border border-stone-200 text-stone-700 text-[10px] rounded px-1.5 py-0.5 focus:outline-none font-mono cursor-pointer">
+        <option value="all">Todas las Familias</option>
+        <option value="dev_tools">Dev Tools & Herramientas</option>
+        <option value="ia">Inteligencia Artificial</option>
+        <option value="modelado_3d">Modelado 3D & Blender</option>
+        <option value="juegos">Desarrollo Videojuegos</option>
+        <option value="mangas">Manga, Anime & Arte</option>
+        <option value="negocios_saas">Negocios & SaaS</option>
+        <option value="otros">Otros</option>
+      </select>
+    </div>
+
+    <!-- Selector de Ordenación con soporte de Pureza Semántica -->
+    <div class="flex items-center gap-1 text-[10px] font-mono text-stone-600">
+      <span>ORDEN:</span>
+      <select id="sortOrderSelect" class="bg-white border border-stone-200 text-stone-700 text-[10px] rounded px-1.5 py-0.5 focus:outline-none font-mono cursor-pointer">
+        <option value="default">Por Defecto</option>
+        <option value="purity_desc">Pureza (100% Puros ➔ Híbridos)</option>
+        <option value="hybrid_first">Híbridos Primero (60-40)</option>
+        <option value="likes_desc">Más Likes</option>
+        <option value="score_desc">Mayor Score</option>
+      </select>
+    </div>
+
+    <!-- Botón para abrir Matriz de Co-ocurrencias -->
+    <button id="openOverlapModalBtn" class="px-2.5 py-1 bg-white hover:bg-stone-50 border border-stone-300 text-stone-700 rounded text-[10px] font-mono font-semibold flex items-center gap-1 transition" title="Ver qué categorías se combinan con más frecuencia">
+      <i class="fa-solid fa-network-wired text-sky-600"></i>
+      <span>Co-ocurrencias</span>
+    </button>
+
+    <!-- Buscador de contenido en celdas -->
+    <div class="relative flex items-center">
+      <i class="fa-solid fa-magnifying-glass absolute left-2 text-stone-400 text-[10px]"></i>
+      <input 
+        type="text" 
+        id="keywordSearch" 
+        placeholder="Buscar en tweets..." 
+        class="pl-6 pr-2 py-0.5 bg-white border border-stone-200 rounded text-[10px] font-mono focus:outline-none focus:border-stone-500 w-32 sm:w-44"
+      />
+    </div>
+  </div>
+</div>

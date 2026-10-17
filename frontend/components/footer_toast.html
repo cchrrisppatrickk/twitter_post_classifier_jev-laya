@@ -1,0 +1,21 @@
+<!-- Tooltip flotante dinámico para celdas de la Matriz Waffle -->
+<div id="tileTooltip" class="fixed hidden pointer-events-none z-50 bg-stone-900 text-white rounded-lg p-2.5 text-[11px] shadow-xl border border-stone-700 max-w-xs transition-opacity duration-150">
+  <div class="flex items-center justify-between gap-3 pb-1 border-b border-stone-800">
+    <span class="font-bold text-stone-200" id="tipCategory">Categoría</span>
+    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold" id="tipScoreBadge">95.2 Afinidad</span>
+  </div>
+  <p class="mt-1 text-stone-300 line-clamp-2 text-[10px]" id="tipContent">Contenido del tweet...</p>
+  <div class="mt-2 flex items-center justify-between text-stone-400 text-[10px]">
+    <span id="tipAuthor"><i class="fa-regular fa-user"></i> @usuario</span>
+    <span id="tipLikes"><i class="fa-regular fa-heart text-rose-400"></i> 1.4K</span>
+  </div>
+</div>
+
+<!-- Overlay para Drawer Lateral -->
+<div id="drawerOverlay" class="fixed inset-0 bg-stone-900/30 z-40 hidden"></div>
+
+<!-- Notificación Flotante Toast -->
+<div id="toastNotification" class="fixed bottom-5 right-5 z-50 bg-stone-900 text-white px-4 py-2.5 rounded-lg text-xs font-mono shadow-lg border border-stone-700 flex items-center gap-2 translate-y-20 opacity-0 transition-all duration-200">
+  <i class="fa-solid fa-circle-check text-emerald-400"></i>
+  <span id="toastMsg">Acción completada</span>
+</div>

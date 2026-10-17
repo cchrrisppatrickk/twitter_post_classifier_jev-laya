@@ -1,0 +1,1245 @@
+{
+  "metadata": {
+    "app": "Twitter Post Classifier Master",
+    "version": "2.1.0",
+    "export_timestamp": "2026-10-16T15:56:11.491934+00:00",
+    "posts_count": 4,
+    "history_count": 0,
+    "checkpoints_count": 0,
+    "feedback_count": 1
+  },
+  "posts": [
+    {
+      "tweet_id": "2109989762899570828",
+      "post_url": "https://x.com/Stefan_3D_AI/status/2109989762899570828",
+      "author_name": "Stefan_3D_AI",
+      "author_id": null,
+      "content": "Free Open-Source Video-to-Animation for Mixamo Rigs, Now Inside Blender\n\nMotion2MixamoRig copies the motion of a person in a video onto a Mixamo-rigged character and hands you a skinned GLB for Blender or Unity.\n\nHighlights:\n• Video or a single photo as input\n• New Blender 4.2+ extension panel\n• Runs locally on CPU, CUDA or Apple Silicon\n• Reuse one take on other characters in tens of seconds\n• Apache-2.0 code\n\nGitHub: https://github.com/MaxLiu22/Motion2MixamoRig",
+      "preview_text": "Free Open-Source Video-to-Animation for Mixamo Rigs, Now Inside Blender\n\nMotion2MixamoRig copies the motion of a person in a video onto a Mi",
+      "date": "2026-10-13 12:48:55",
+      "favorite_count": 196,
+      "retweet_count": 25,
+      "reply_count": 0,
+      "bookmark_count": 0,
+      "media_urls": [
+        "https://video.twimg.com/amplify_video/2109989636202487808/vid/avc1/1920x1080/2n6y7oEOpFXegjAD.mp4?tag=29"
+      ],
+      "media_count": 1,
+      "media_type": "video",
+      "lang": "en",
+      "primary_category": "herramientas_ia",
+      "secondary_categories": [
+        {
+          "id": "ia_local",
+          "score": 1.0
+        },
+        {
+          "id": "hardware_benchmarks",
+          "score": 1.0
+        },
+        {
+          "id": "blender",
+          "score": 1.0
+        }
+      ],
+      "affinity_score": 1.0,
+      "format": "opensource",
+      "format_confidence": 0.6913,
+      "technical_depth": 2.2204,
+      "assets": [
+        "github_repo",
+        "huggingface_model"
+      ],
+      "is_local_first": 1,
+      "is_nsfw": 0,
+      "is_outlier": 0,
+      "status": "CLASSIFIED",
+      "engine_used": "english",
+      "inference_latency_ms": 38390.61,
+      "created_at": "2026-10-16 03:18:57",
+      "updated_at": "2026-10-16 03:18:57",
+      "raw_json": {
+        "tweet_id": "2109989762899570828",
+        "content": "Free Open-Source Video-to-Animation for Mixamo Rigs, Now Inside Blender\n\nMotion2MixamoRig copies the motion of a person in a video onto a Mixamo-rigged character and hands you a skinned GLB for Blender or Unity.\n\nHighlights:\n• Video or a single photo as input\n• New Blender 4.2+ extension panel\n• Runs locally on CPU, CUDA or Apple Silicon\n• Reuse one take on other characters in tens of seconds\n• Apache-2.0 code\n\nGitHub: https://github.com/MaxLiu22/Motion2MixamoRig",
+        "author_name": "Stefan_3D_AI",
+        "favorite_count": 196,
+        "retweet_count": 25,
+        "media_urls": [
+          "https://video.twimg.com/amplify_video/2109989636202487808/vid/avc1/1920x1080/2n6y7oEOpFXegjAD.mp4?tag=29"
+        ],
+        "media_type": "video",
+        "date": "2026-10-13 12:48:55",
+        "post_url": "https://x.com/Stefan_3D_AI/status/2109989762899570828"
+      },
+      "classification_json": {
+        "primary_category": "herramientas_ia",
+        "secondary_categories": [
+          {
+            "id": "ia_local",
+            "score": 1.0
+          },
+          {
+            "id": "hardware_benchmarks",
+            "score": 1.0
+          },
+          {
+            "id": "blender",
+            "score": 1.0
+          }
+        ],
+        "affinity_score": 1.0,
+        "format": "opensource",
+        "format_confidence": 0.6913,
+        "technical_depth": 2.2204,
+        "assets": [
+          "github_repo",
+          "huggingface_model"
+        ],
+        "is_local_first": true,
+        "is_nsfw": false,
+        "is_outlier": false,
+        "status": "CLASSIFIED",
+        "engine_used": "english",
+        "inference_latency_ms": 38390.61,
+        "raw_answers": {
+          "category": {
+            "type": "choice",
+            "choice": "herramientas_ia",
+            "probabilities": {
+              "comfyui_workflows": 0.0,
+              "blender_addons": 0.0075,
+              "comfyui_instalacion": 0.0,
+              "agente_claude": 0.0,
+              "agente_codex": 0.0,
+              "agente_gemini": 0.0,
+              "blender_tutoriales": 0.0004,
+              "blender_dev": 0.0045,
+              "gen_imagenes": 0.0002,
+              "gen_video": 0.1099,
+              "gen_audio": 0.0,
+              "gen_3d": 0.0004,
+              "modelos_huggingface": 0.0002,
+              "lora_civitai": 0.0,
+              "agente_antigravity": 0.0,
+              "blender": 0.0002,
+              "unity": 0.0003,
+              "unreal": 0.0,
+              "godot": 0.0001,
+              "modelos_cuantificados": 0.0001,
+              "webcomic_manga_serial": 0.0001,
+              "modelos_sin_censura": 0.0001,
+              "fanart_anime": 0.0,
+              "hardware_benchmarks": 0.0,
+              "gen_texto": 0.0,
+              "threejs_webgl": 0.0009,
+              "indie_dev": 0.0159,
+              "frontend_ui_motion": 0.0051,
+              "motion_design_vfx": 0.0014,
+              "assets_gamedev": 0.0001,
+              "backend_infra_cli": 0.0016,
+              "vision": 0.0,
+              "comfyui": 0.0,
+              "otros_3d": 0.0004,
+              "lanzamientos_juegos": 0.0001,
+              "ia_local": 0.0002,
+              "modelos_ia": 0.0001,
+              "agentes_ia": 0.0,
+              "ia_generativa": 0.0001,
+              "juegos": 0.4038,
+              "herramientas_ia": 0.4346,
+              "dev_tools": 0.0106,
+              "modelado_3d": 0.0001,
+              "vfx_compositing": 0.0003,
+              "negocios_saas": 0.0,
+              "mangas": 0.0,
+              "ia": 0.0002,
+              "otros": 0.0004
+            },
+            "confidence": 0.6811,
+            "answer_confidence": 0.4346,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "content_format": {
+            "type": "choice",
+            "choice": "opensource",
+            "probabilities": {
+              "launch": 0.0655,
+              "opensource": 0.6913,
+              "builddemo": 0.0728,
+              "explainer": 0.0911,
+              "receipt": 0.0088,
+              "curation": 0.0475,
+              "other": 0.023
+            },
+            "confidence": 0.4266,
+            "answer_confidence": 0.6913,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "technical_depth": {
+            "type": "score",
+            "score": 2.2204,
+            "legend": {
+              "0": "Nivel 1: Divulgación general, memes, humor o reflexiones de opinión sin contenido técnico verificable",
+              "1": "Nivel 2: Demostración visual superficial, captura de pantalla o descripción conceptual sin detalles de implementación",
+              "2": "Nivel 3: Flujo de trabajo técnico aplicable, configuración detallada o metodología reproducible paso a paso",
+              "3": "Nivel 4: Parámetros técnicos avanzados, prompts reproducibles completos, fragmentos de código o configuraciones complejas",
+              "4": "Nivel 5: Repositorio de código fuente completo, arquitectura de software, shaders matemáticos o release formal de ingeniería"
+            },
+            "probabilities": {
+              "0": 0.0992,
+              "1": 0.2259,
+              "2": 0.2519,
+              "3": 0.2013,
+              "4": 0.2217
+            },
+            "confidence": 0.025,
+            "answer_confidence": 0.2519,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "reproducible_asset_type": {
+            "type": "choice",
+            "choice": "huggingface_model",
+            "probabilities": {
+              "github_repo": 0.1489,
+              "comfyui_workflow": 0.0247,
+              "huggingface_model": 0.3484,
+              "civitai_lora": 0.0501,
+              "installation_guide": 0.0355,
+              "tutorial_link": 0.0759,
+              "prompt_share": 0.1368,
+              "none": 0.1796
+            },
+            "confidence": 0.1406,
+            "answer_confidence": 0.3484,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_uncensored_or_nsfw": {
+            "type": "noul",
+            "noul": 0.4961,
+            "confidence": 0.5039,
+            "answer_confidence": 0.5039,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_local_first": {
+            "type": "noul",
+            "noul": 0.5572,
+            "confidence": 0.5572,
+            "answer_confidence": 0.5572,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_ia": {
+            "type": "noul",
+            "noul": 0.7879,
+            "confidence": 0.7879,
+            "answer_confidence": 0.7879,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_blender": {
+            "type": "noul",
+            "noul": 0.9232,
+            "confidence": 0.9232,
+            "answer_confidence": 0.9232,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_modelado_3d": {
+            "type": "noul",
+            "noul": 0.8214,
+            "confidence": 0.8214,
+            "answer_confidence": 0.8214,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_juegos": {
+            "type": "noul",
+            "noul": 0.828,
+            "confidence": 0.828,
+            "answer_confidence": 0.828,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_dev_tools": {
+            "type": "noul",
+            "noul": 0.8436,
+            "confidence": 0.8436,
+            "answer_confidence": 0.8436,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_mangas": {
+            "type": "noul",
+            "noul": 0.0721,
+            "confidence": 0.9279,
+            "answer_confidence": 0.9279,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_negocios_saas": {
+            "type": "noul",
+            "noul": 0.0643,
+            "confidence": 0.9357,
+            "answer_confidence": 0.9357,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_otros": {
+            "type": "noul",
+            "noul": 0.164,
+            "confidence": 0.836,
+            "answer_confidence": 0.836,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        }
+      },
+      "taxonomy_version": "2.1.0",
+      "reclassification_count": 0
+    },
+    {
+      "tweet_id": "2109894214842814627",
+      "post_url": "https://x.com/JanKirschnick/status/2109894214842814627",
+      "author_name": "JanKirschnick",
+      "author_id": null,
+      "content": "突然ウチにやって来た隣人\n(1/6)SFW",
+      "preview_text": "突然ウチにやって来た隣人\n(1/6)SFW",
+      "date": "2026-10-13 06:29:15",
+      "favorite_count": 1514,
+      "retweet_count": 35,
+      "reply_count": 0,
+      "bookmark_count": 0,
+      "media_urls": [
+        "https://pbs.twimg.com/media/HUfZmbKWsAAWzSj?format=jpg&name=orig"
+      ],
+      "media_count": 1,
+      "media_type": "photo",
+      "lang": "en",
+      "primary_category": "comfyui",
+      "secondary_categories": [
+        {
+          "id": "ia",
+          "score": 0.68
+        },
+        {
+          "id": "webcomic_manga_serial",
+          "score": 0.58
+        },
+        {
+          "id": "mangas",
+          "score": 0.53
+        }
+      ],
+      "affinity_score": 1.0,
+      "format": "curation",
+      "format_confidence": 0.2761,
+      "technical_depth": 1.2363,
+      "assets": [],
+      "is_local_first": 1,
+      "is_nsfw": 0,
+      "is_outlier": 0,
+      "status": "CLASSIFIED",
+      "engine_used": "multilingual",
+      "inference_latency_ms": 15012.96,
+      "created_at": "2026-10-16 03:19:12",
+      "updated_at": "2026-10-16 03:19:12",
+      "raw_json": {
+        "tweet_id": "2109894214842814627",
+        "content": "突然ウチにやって来た隣人\n(1/6)SFW",
+        "author_name": "JanKirschnick",
+        "favorite_count": 1514,
+        "retweet_count": 35,
+        "media_urls": [
+          "https://pbs.twimg.com/media/HUfZmbKWsAAWzSj?format=jpg&name=orig"
+        ],
+        "media_type": "image",
+        "date": "2026-10-13 06:29:15",
+        "post_url": "https://x.com/JanKirschnick/status/2109894214842814627"
+      },
+      "classification_json": {
+        "primary_category": "comfyui",
+        "secondary_categories": [
+          {
+            "id": "ia",
+            "score": 0.68
+          },
+          {
+            "id": "webcomic_manga_serial",
+            "score": 0.58
+          },
+          {
+            "id": "mangas",
+            "score": 0.53
+          }
+        ],
+        "affinity_score": 1.0,
+        "format": "curation",
+        "format_confidence": 0.2761,
+        "technical_depth": 1.2363,
+        "assets": [],
+        "is_local_first": true,
+        "is_nsfw": false,
+        "is_outlier": false,
+        "status": "CLASSIFIED",
+        "engine_used": "multilingual",
+        "inference_latency_ms": 15012.96,
+        "raw_answers": {
+          "category": {
+            "type": "choice",
+            "choice": "comfyui",
+            "probabilities": {
+              "comfyui_workflows": 0.0001,
+              "blender_addons": 0.0,
+              "comfyui_instalacion": 0.0011,
+              "agente_claude": 0.0,
+              "agente_codex": 0.0002,
+              "agente_gemini": 0.0,
+              "blender_tutoriales": 0.0,
+              "blender_dev": 0.0,
+              "gen_imagenes": 0.0,
+              "gen_video": 0.0,
+              "gen_audio": 0.0,
+              "gen_3d": 0.0,
+              "modelos_huggingface": 0.0,
+              "lora_civitai": 0.0,
+              "agente_antigravity": 0.0001,
+              "blender": 0.0,
+              "unity": 0.0,
+              "unreal": 0.0,
+              "godot": 0.0,
+              "modelos_cuantificados": 0.0,
+              "webcomic_manga_serial": 0.0,
+              "modelos_sin_censura": 0.0,
+              "fanart_anime": 0.0,
+              "hardware_benchmarks": 0.0,
+              "gen_texto": 0.0,
+              "threejs_webgl": 0.0,
+              "indie_dev": 0.0,
+              "frontend_ui_motion": 0.0,
+              "motion_design_vfx": 0.0,
+              "assets_gamedev": 0.0,
+              "backend_infra_cli": 0.0,
+              "vision": 0.0,
+              "comfyui": 0.9983,
+              "otros_3d": 0.0,
+              "lanzamientos_juegos": 0.0,
+              "ia_local": 0.0,
+              "modelos_ia": 0.0,
+              "agentes_ia": 0.0,
+              "ia_generativa": 0.0,
+              "juegos": 0.0,
+              "herramientas_ia": 0.0,
+              "dev_tools": 0.0,
+              "modelado_3d": 0.0,
+              "vfx_compositing": 0.0,
+              "negocios_saas": 0.0,
+              "mangas": 0.0,
+              "ia": 0.0,
+              "otros": 0.0
+            },
+            "confidence": 0.9962,
+            "answer_confidence": 0.9983,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "content_format": {
+            "type": "choice",
+            "choice": "curation",
+            "probabilities": {
+              "launch": 0.184,
+              "opensource": 0.2512,
+              "builddemo": 0.128,
+              "explainer": 0.0385,
+              "receipt": 0.0085,
+              "curation": 0.2761,
+              "other": 0.1137
+            },
+            "confidence": 0.1314,
+            "answer_confidence": 0.2761,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "technical_depth": {
+            "type": "score",
+            "score": 1.2363,
+            "legend": {
+              "0": "Nivel 1: Divulgación general, memes, humor o reflexiones de opinión sin contenido técnico verificable",
+              "1": "Nivel 2: Demostración visual superficial, captura de pantalla o descripción conceptual sin detalles de implementación",
+              "2": "Nivel 3: Flujo de trabajo técnico aplicable, configuración detallada o metodología reproducible paso a paso",
+              "3": "Nivel 4: Parámetros técnicos avanzados, prompts reproducibles completos, fragmentos de código o configuraciones complejas",
+              "4": "Nivel 5: Repositorio de código fuente completo, arquitectura de software, shaders matemáticos o release formal de ingeniería"
+            },
+            "probabilities": {
+              "0": 0.2915,
+              "1": 0.49,
+              "2": 0.0482,
+              "3": 0.0312,
+              "4": 0.1391
+            },
+            "confidence": 0.2311,
+            "answer_confidence": 0.49,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "reproducible_asset_type": {
+            "type": "choice",
+            "choice": "none",
+            "probabilities": {
+              "github_repo": 0.0075,
+              "comfyui_workflow": 0.007,
+              "huggingface_model": 0.0069,
+              "civitai_lora": 0.3212,
+              "installation_guide": 0.007,
+              "tutorial_link": 0.0069,
+              "prompt_share": 0.0145,
+              "none": 0.629
+            },
+            "confidence": 0.5706,
+            "answer_confidence": 0.629,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_uncensored_or_nsfw": {
+            "type": "noul",
+            "noul": 0.4297,
+            "confidence": 0.5703,
+            "answer_confidence": 0.5703,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_local_first": {
+            "type": "noul",
+            "noul": 0.7011,
+            "confidence": 0.7011,
+            "answer_confidence": 0.7011,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_ia": {
+            "type": "noul",
+            "noul": 0.9315,
+            "confidence": 0.9315,
+            "answer_confidence": 0.9315,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_blender": {
+            "type": "noul",
+            "noul": 0.4101,
+            "confidence": 0.5899,
+            "answer_confidence": 0.5899,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_modelado_3d": {
+            "type": "noul",
+            "noul": 0.9663,
+            "confidence": 0.9663,
+            "answer_confidence": 0.9663,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_juegos": {
+            "type": "noul",
+            "noul": 0.726,
+            "confidence": 0.726,
+            "answer_confidence": 0.726,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_dev_tools": {
+            "type": "noul",
+            "noul": 0.9611,
+            "confidence": 0.9611,
+            "answer_confidence": 0.9611,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_mangas": {
+            "type": "noul",
+            "noul": 0.4966,
+            "confidence": 0.5034,
+            "answer_confidence": 0.5034,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_negocios_saas": {
+            "type": "noul",
+            "noul": 0.7645,
+            "confidence": 0.7645,
+            "answer_confidence": 0.7645,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_otros": {
+            "type": "noul",
+            "noul": 0.1245,
+            "confidence": 0.8755,
+            "answer_confidence": 0.8755,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        }
+      },
+      "taxonomy_version": "2.1.0",
+      "reclassification_count": 0
+    },
+    {
+      "tweet_id": "2109885465839226904",
+      "post_url": "https://x.com/threejs/status/2109885465839226904",
+      "author_name": "threejs",
+      "author_id": null,
+      "content": "✍️ https://tools.oyasumi-gamedev.com/rokehan/",
+      "preview_text": "✍️ https://tools.oyasumi-gamedev.com/rokehan/",
+      "date": "2026-10-13 05:54:29",
+      "favorite_count": 237,
+      "retweet_count": 27,
+      "reply_count": 0,
+      "bookmark_count": 0,
+      "media_urls": [
+        "https://video.twimg.com/amplify_video/2109815111548575744/vid/avc1/1280x720/qmz5EclDGX8dcgZV.mp4?tag=29"
+      ],
+      "media_count": 1,
+      "media_type": "video",
+      "lang": "en",
+      "primary_category": "threejs_webgl",
+      "secondary_categories": [
+        {
+          "id": "blender_addons",
+          "score": 1.0
+        },
+        {
+          "id": "ia_local",
+          "score": 0.95
+        },
+        {
+          "id": "vision",
+          "score": 0.95
+        }
+      ],
+      "affinity_score": 1.0,
+      "format": "opensource",
+      "format_confidence": 0.4295,
+      "technical_depth": 1.7975,
+      "assets": [
+        "installation_guide"
+      ],
+      "is_local_first": 1,
+      "is_nsfw": 1,
+      "is_outlier": 0,
+      "status": "CLASSIFIED",
+      "engine_used": "multilingual",
+      "inference_latency_ms": 11150.84,
+      "created_at": "2026-10-16 03:19:23",
+      "updated_at": "2026-10-16 03:19:23",
+      "raw_json": {
+        "tweet_id": "2109885465839226904",
+        "content": "✍️ https://tools.oyasumi-gamedev.com/rokehan/",
+        "author_name": "threejs",
+        "favorite_count": 237,
+        "retweet_count": 27,
+        "media_urls": [
+          "https://video.twimg.com/amplify_video/2109815111548575744/vid/avc1/1280x720/qmz5EclDGX8dcgZV.mp4?tag=29"
+        ],
+        "media_type": "video",
+        "date": "2026-10-13 05:54:29",
+        "post_url": "https://x.com/threejs/status/2109885465839226904"
+      },
+      "classification_json": {
+        "primary_category": "threejs_webgl",
+        "secondary_categories": [
+          {
+            "id": "blender_addons",
+            "score": 1.0
+          },
+          {
+            "id": "ia_local",
+            "score": 0.95
+          },
+          {
+            "id": "vision",
+            "score": 0.95
+          }
+        ],
+        "affinity_score": 1.0,
+        "format": "opensource",
+        "format_confidence": 0.4295,
+        "technical_depth": 1.7975,
+        "assets": [
+          "installation_guide"
+        ],
+        "is_local_first": true,
+        "is_nsfw": true,
+        "is_outlier": false,
+        "status": "CLASSIFIED",
+        "engine_used": "multilingual",
+        "inference_latency_ms": 11150.84,
+        "raw_answers": {
+          "category": {
+            "type": "choice",
+            "choice": "threejs_webgl",
+            "probabilities": {
+              "comfyui_workflows": 0.0,
+              "blender_addons": 0.0,
+              "comfyui_instalacion": 0.0,
+              "agente_claude": 0.0,
+              "agente_codex": 0.0,
+              "agente_gemini": 0.0,
+              "blender_tutoriales": 0.0,
+              "blender_dev": 0.0,
+              "gen_imagenes": 0.0,
+              "gen_video": 0.0,
+              "gen_audio": 0.0,
+              "gen_3d": 0.0,
+              "modelos_huggingface": 0.0,
+              "lora_civitai": 0.0,
+              "agente_antigravity": 0.0,
+              "blender": 0.0,
+              "unity": 0.0,
+              "unreal": 0.0,
+              "godot": 0.0,
+              "modelos_cuantificados": 0.0,
+              "webcomic_manga_serial": 0.0,
+              "modelos_sin_censura": 0.0,
+              "fanart_anime": 0.0,
+              "hardware_benchmarks": 0.0,
+              "gen_texto": 0.0,
+              "threejs_webgl": 0.9997,
+              "indie_dev": 0.0,
+              "frontend_ui_motion": 0.0,
+              "motion_design_vfx": 0.0,
+              "assets_gamedev": 0.0,
+              "backend_infra_cli": 0.0,
+              "vision": 0.0,
+              "comfyui": 0.0,
+              "otros_3d": 0.0,
+              "lanzamientos_juegos": 0.0,
+              "ia_local": 0.0,
+              "modelos_ia": 0.0,
+              "agentes_ia": 0.0,
+              "ia_generativa": 0.0,
+              "juegos": 0.0,
+              "herramientas_ia": 0.0,
+              "dev_tools": 0.0003,
+              "modelado_3d": 0.0,
+              "vfx_compositing": 0.0,
+              "negocios_saas": 0.0,
+              "mangas": 0.0,
+              "ia": 0.0,
+              "otros": 0.0
+            },
+            "confidence": 0.9994,
+            "answer_confidence": 0.9997,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "content_format": {
+            "type": "choice",
+            "choice": "opensource",
+            "probabilities": {
+              "launch": 0.0965,
+              "opensource": 0.4295,
+              "builddemo": 0.1526,
+              "explainer": 0.0609,
+              "receipt": 0.0257,
+              "curation": 0.1781,
+              "other": 0.0567
+            },
+            "confidence": 0.1726,
+            "answer_confidence": 0.4295,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "technical_depth": {
+            "type": "score",
+            "score": 1.7975,
+            "legend": {
+              "0": "Nivel 1: Divulgación general, memes, humor o reflexiones de opinión sin contenido técnico verificable",
+              "1": "Nivel 2: Demostración visual superficial, captura de pantalla o descripción conceptual sin detalles de implementación",
+              "2": "Nivel 3: Flujo de trabajo técnico aplicable, configuración detallada o metodología reproducible paso a paso",
+              "3": "Nivel 4: Parámetros técnicos avanzados, prompts reproducibles completos, fragmentos de código o configuraciones complejas",
+              "4": "Nivel 5: Repositorio de código fuente completo, arquitectura de software, shaders matemáticos o release formal de ingeniería"
+            },
+            "probabilities": {
+              "0": 0.239,
+              "1": 0.324,
+              "2": 0.1019,
+              "3": 0.0709,
+              "4": 0.2643
+            },
+            "confidence": 0.0809,
+            "answer_confidence": 0.324,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "reproducible_asset_type": {
+            "type": "choice",
+            "choice": "installation_guide",
+            "probabilities": {
+              "github_repo": 0.0714,
+              "comfyui_workflow": 0.0125,
+              "huggingface_model": 0.0158,
+              "civitai_lora": 0.0168,
+              "installation_guide": 0.5789,
+              "tutorial_link": 0.0154,
+              "prompt_share": 0.0439,
+              "none": 0.2453
+            },
+            "confidence": 0.4037,
+            "answer_confidence": 0.5789,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_uncensored_or_nsfw": {
+            "type": "noul",
+            "noul": 0.9079,
+            "confidence": 0.9079,
+            "answer_confidence": 0.9079,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_local_first": {
+            "type": "noul",
+            "noul": 0.9999,
+            "confidence": 0.9999,
+            "answer_confidence": 0.9999,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_ia": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_blender": {
+            "type": "noul",
+            "noul": 0.9453,
+            "confidence": 0.9453,
+            "answer_confidence": 0.9453,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_modelado_3d": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_juegos": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_dev_tools": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_mangas": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_negocios_saas": {
+            "type": "noul",
+            "noul": 0.9966,
+            "confidence": 0.9966,
+            "answer_confidence": 0.9966,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_otros": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        }
+      },
+      "taxonomy_version": "2.1.0",
+      "reclassification_count": 0
+    },
+    {
+      "tweet_id": "2109751067882008719",
+      "post_url": "https://x.com/AI_swwww/status/2109751067882008719",
+      "author_name": "AI_swwww",
+      "author_id": null,
+      "content": "まっじで\nイラスト作っているなら絵柄はこだわらないといつまでも量産型のまま\n\nこれやらないと一生電子ゴミの画像を量産してしまう。\n絵柄ごとのプロンプトはリプ欄へ👇",
+      "preview_text": "まっじで\nイラスト作っているなら絵柄はこだわらないといつまでも量産型のまま\n\nこれやらないと一生電子ゴミの画像を量産してしまう。\n絵柄ごとのプロンプトはリプ欄へ👇",
+      "date": "2026-10-12 21:00:26",
+      "favorite_count": 257,
+      "retweet_count": 38,
+      "reply_count": 0,
+      "bookmark_count": 0,
+      "media_urls": [
+        "https://pbs.twimg.com/media/HUdXZKEakAAQPgj?format=jpg&name=orig"
+      ],
+      "media_count": 1,
+      "media_type": "photo",
+      "lang": "en",
+      "primary_category": "comfyui",
+      "secondary_categories": [
+        {
+          "id": "ia_local",
+          "score": 0.95
+        },
+        {
+          "id": "vision",
+          "score": 0.95
+        },
+        {
+          "id": "comfyui_instalacion",
+          "score": 0.95
+        }
+      ],
+      "affinity_score": 1.0,
+      "format": "opensource",
+      "format_confidence": 0.8231,
+      "technical_depth": 1.9854,
+      "assets": [
+        "installation_guide"
+      ],
+      "is_local_first": 1,
+      "is_nsfw": 1,
+      "is_outlier": 0,
+      "status": "CLASSIFIED",
+      "engine_used": "multilingual",
+      "inference_latency_ms": 11062.27,
+      "created_at": "2026-10-16 03:19:35",
+      "updated_at": "2026-10-16 03:19:35",
+      "raw_json": {
+        "tweet_id": "2109751067882008719",
+        "content": "まっじで\nイラスト作っているなら絵柄はこだわらないといつまでも量産型のまま\n\nこれやらないと一生電子ゴミの画像を量産してしまう。\n絵柄ごとのプロンプトはリプ欄へ👇",
+        "author_name": "AI_swwww",
+        "favorite_count": 257,
+        "retweet_count": 38,
+        "media_urls": [
+          "https://pbs.twimg.com/media/HUdXZKEakAAQPgj?format=jpg&name=orig"
+        ],
+        "media_type": "image",
+        "date": "2026-10-12 21:00:26",
+        "post_url": "https://x.com/AI_swwww/status/2109751067882008719"
+      },
+      "classification_json": {
+        "primary_category": "comfyui",
+        "secondary_categories": [
+          {
+            "id": "ia_local",
+            "score": 0.95
+          },
+          {
+            "id": "vision",
+            "score": 0.95
+          },
+          {
+            "id": "comfyui_instalacion",
+            "score": 0.95
+          }
+        ],
+        "affinity_score": 1.0,
+        "format": "opensource",
+        "format_confidence": 0.8231,
+        "technical_depth": 1.9854,
+        "assets": [
+          "installation_guide"
+        ],
+        "is_local_first": true,
+        "is_nsfw": true,
+        "is_outlier": false,
+        "status": "CLASSIFIED",
+        "engine_used": "multilingual",
+        "inference_latency_ms": 11062.27,
+        "raw_answers": {
+          "category": {
+            "type": "choice",
+            "choice": "comfyui",
+            "probabilities": {
+              "comfyui_workflows": 0.0003,
+              "blender_addons": 0.0016,
+              "comfyui_instalacion": 0.0055,
+              "agente_claude": 0.0081,
+              "agente_codex": 0.0712,
+              "agente_gemini": 0.0011,
+              "blender_tutoriales": 0.0002,
+              "blender_dev": 0.0003,
+              "gen_imagenes": 0.0049,
+              "gen_video": 0.0001,
+              "gen_audio": 0.0001,
+              "gen_3d": 0.0074,
+              "modelos_huggingface": 0.0002,
+              "lora_civitai": 0.0001,
+              "agente_antigravity": 0.0053,
+              "blender": 0.0006,
+              "unity": 0.0021,
+              "unreal": 0.0008,
+              "godot": 0.0006,
+              "modelos_cuantificados": 0.0002,
+              "webcomic_manga_serial": 0.0102,
+              "modelos_sin_censura": 0.0004,
+              "fanart_anime": 0.0009,
+              "hardware_benchmarks": 0.0001,
+              "gen_texto": 0.0005,
+              "threejs_webgl": 0.0001,
+              "indie_dev": 0.0002,
+              "frontend_ui_motion": 0.0002,
+              "motion_design_vfx": 0.0001,
+              "assets_gamedev": 0.0012,
+              "backend_infra_cli": 0.0007,
+              "vision": 0.0001,
+              "comfyui": 0.846,
+              "otros_3d": 0.0018,
+              "lanzamientos_juegos": 0.0001,
+              "ia_local": 0.0005,
+              "modelos_ia": 0.0002,
+              "agentes_ia": 0.001,
+              "ia_generativa": 0.0003,
+              "juegos": 0.001,
+              "herramientas_ia": 0.0006,
+              "dev_tools": 0.0002,
+              "modelado_3d": 0.0001,
+              "vfx_compositing": 0.0014,
+              "negocios_saas": 0.0119,
+              "mangas": 0.0057,
+              "ia": 0.0012,
+              "otros": 0.0028
+            },
+            "confidence": 0.7981,
+            "answer_confidence": 0.846,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "content_format": {
+            "type": "choice",
+            "choice": "opensource",
+            "probabilities": {
+              "launch": 0.0169,
+              "opensource": 0.8231,
+              "builddemo": 0.0192,
+              "explainer": 0.0201,
+              "receipt": 0.0324,
+              "curation": 0.0752,
+              "other": 0.0132
+            },
+            "confidence": 0.6165,
+            "answer_confidence": 0.8231,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "technical_depth": {
+            "type": "score",
+            "score": 1.9854,
+            "legend": {
+              "0": "Nivel 1: Divulgación general, memes, humor o reflexiones de opinión sin contenido técnico verificable",
+              "1": "Nivel 2: Demostración visual superficial, captura de pantalla o descripción conceptual sin detalles de implementación",
+              "2": "Nivel 3: Flujo de trabajo técnico aplicable, configuración detallada o metodología reproducible paso a paso",
+              "3": "Nivel 4: Parámetros técnicos avanzados, prompts reproducibles completos, fragmentos de código o configuraciones complejas",
+              "4": "Nivel 5: Repositorio de código fuente completo, arquitectura de software, shaders matemáticos o release formal de ingeniería"
+            },
+            "probabilities": {
+              "0": 0.054,
+              "1": 0.4291,
+              "2": 0.2041,
+              "3": 0.103,
+              "4": 0.2098
+            },
+            "confidence": 0.1259,
+            "answer_confidence": 0.4291,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "reproducible_asset_type": {
+            "type": "choice",
+            "choice": "installation_guide",
+            "probabilities": {
+              "github_repo": 0.0109,
+              "comfyui_workflow": 0.0098,
+              "huggingface_model": 0.0257,
+              "civitai_lora": 0.0099,
+              "installation_guide": 0.5984,
+              "tutorial_link": 0.0098,
+              "prompt_share": 0.0504,
+              "none": 0.2852
+            },
+            "confidence": 0.4734,
+            "answer_confidence": 0.5984,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_uncensored_or_nsfw": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_local_first": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_ia": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_blender": {
+            "type": "noul",
+            "noul": 0.9942,
+            "confidence": 0.9942,
+            "answer_confidence": 0.9942,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_modelado_3d": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_juegos": {
+            "type": "noul",
+            "noul": 0.9929,
+            "confidence": 0.9929,
+            "answer_confidence": 0.9929,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_dev_tools": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_mangas": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_negocios_saas": {
+            "type": "noul",
+            "noul": 1.0,
+            "confidence": 1.0,
+            "answer_confidence": 1.0,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "is_family_otros": {
+            "type": "noul",
+            "noul": 0.9922,
+            "confidence": 0.9922,
+            "answer_confidence": 0.9922,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        }
+      },
+      "taxonomy_version": "2.1.0",
+      "reclassification_count": 0
+    }
+  ],
+  "history": [],
+  "checkpoints": [],
+  "feedback": [
+    {
+      "id": 1,
+      "tweet_id": "2109989762899570999",
+      "original_content": "Is this ComfyUI workflow faster than Blender Python scripting for procedural textures?",
+      "laya_suggested_category": "comfyui_workflows",
+      "laya_confidence": 0.46,
+      "resolved_category": "blender_addons",
+      "resolved_by": "manual_user",
+      "created_at": "2026-10-14 20:23:05"
+    }
+  ]
+}

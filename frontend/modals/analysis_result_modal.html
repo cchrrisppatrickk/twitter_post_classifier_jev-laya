@@ -1,0 +1,162 @@
+<!-- MODAL: Resultado de Análisis Laya AI (Subfase 5.4) -->
+<div id="analysisResultModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-stone-200 space-y-4 max-h-[90vh] flex flex-col font-sans">
+    
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between pb-3 border-b border-stone-100 flex-shrink-0">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center text-sm font-bold">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="font-bold text-sm text-stone-900 font-mono">Resultado del Análisis Laya AI</h3>
+            <span id="analysisResultStatusBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 uppercase tracking-wider">CLASSIFIED</span>
+          </div>
+          <p class="text-[11px] text-stone-500 font-mono">Inferencia System 1 ejecutada localmente en CPU</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="analysisResultLatencyBadge" class="px-2 py-0.5 rounded text-[10px] font-mono bg-stone-100 text-stone-700 border border-stone-200">
+          <i class="fa-solid fa-stopwatch text-amber-500 mr-1"></i><span id="analysisLatencyVal">0.00</span> ms
+        </span>
+        <span id="analysisResultEngineBadge" class="px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-50 text-indigo-700 border border-indigo-100">
+          convaiinnovations/laya
+        </span>
+        <button id="closeAnalysisResultModalBtn" class="text-stone-400 hover:text-stone-600 ml-1">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal Body (Scrollable) -->
+    <div class="space-y-4 text-xs overflow-y-auto pr-1 flex-1">
+      
+      <!-- Vista previa del texto analizado -->
+      <div class="p-3 bg-stone-50 rounded-xl border border-stone-200/80">
+        <div class="flex items-center justify-between mb-1.5 font-mono text-[10px] text-stone-500">
+          <span class="flex items-center gap-1.5 font-semibold text-stone-700">
+            <i class="fa-brands fa-x-twitter text-stone-800"></i>
+            <span id="analysisAuthorName">@dev_user</span>
+          </span>
+          <span id="analysisTweetId" class="text-stone-400">ID: manual_test</span>
+        </div>
+        <p id="analysisContentPreview" class="text-stone-800 text-xs leading-relaxed italic break-words">
+          "Contenido del tweet..."
+        </p>
+      </div>
+
+      <!-- Tarjeta de Categoría Primaria Asignada -->
+      <div class="p-4 rounded-xl border border-stone-200 bg-gradient-to-br from-stone-50 to-white shadow-xs">
+        <div class="flex items-start justify-between gap-3">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2.5">
+              <span id="analysisCategoryCode" class="w-8 h-8 rounded-lg text-white font-mono font-bold text-xs flex items-center justify-center shadow-xs bg-stone-700">
+                CAT
+              </span>
+              <div>
+                <h4 id="analysisCategoryLabel" class="text-sm font-bold text-stone-900 leading-tight">
+                  Nombre de Categoría
+                </h4>
+                <span id="analysisFamilyLabel" class="text-[10px] font-mono text-stone-500 uppercase tracking-wide">
+                  Familia: General
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Score de Afinidad -->
+          <div class="text-right">
+            <div class="flex items-baseline justify-end gap-1 font-mono">
+              <span class="text-[11px] text-stone-500 font-semibold">Afinidad:</span>
+              <span id="analysisAffinityPct" class="text-base font-black text-emerald-700">95%</span>
+            </div>
+            <div class="w-24 bg-stone-200 rounded-full h-1.5 mt-1 overflow-hidden">
+              <div id="analysisAffinityBar" class="bg-emerald-600 h-1.5 rounded-full transition-all duration-300" style="width: 95%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid de Métricas y Atributos Técnicos -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono">
+        <!-- Formato -->
+        <div class="p-2.5 rounded-lg bg-stone-50 border border-stone-200">
+          <span class="text-[10px] text-stone-500 block">Formato Contenido</span>
+          <span id="analysisFormatVal" class="font-bold text-stone-800 text-[11px] capitalize truncate block">Launch</span>
+          <span id="analysisFormatConf" class="text-[9px] text-stone-400 block">Conf: 72%</span>
+        </div>
+
+        <!-- Nivel Técnico -->
+        <div class="p-2.5 rounded-lg bg-stone-50 border border-stone-200">
+          <span class="text-[10px] text-stone-500 block">Profundidad Técnica</span>
+          <span id="analysisTechDepthVal" class="font-bold text-amber-700 text-[11px] block">3.1 / 5.0</span>
+          <span id="analysisTechDepthText" class="text-[9px] text-stone-400 block truncate">Intermedio</span>
+        </div>
+
+        <!-- Local First / NSFW -->
+        <div class="p-2.5 rounded-lg bg-stone-50 border border-stone-200">
+          <span class="text-[10px] text-stone-500 block">Flags Especiales</span>
+          <div class="flex flex-wrap gap-1 mt-0.5" id="analysisFlagsBadges">
+            <span class="px-1.5 py-0.5 rounded text-[9px] bg-stone-200 text-stone-600 font-semibold">Ninguna</span>
+          </div>
+        </div>
+
+        <!-- Activos Detectados -->
+        <div class="p-2.5 rounded-lg bg-stone-50 border border-stone-200">
+          <span class="text-[10px] text-stone-500 block">Activos Detectados</span>
+          <div class="flex flex-wrap gap-1 mt-0.5" id="analysisAssetsBadges">
+            <span class="text-[10px] text-stone-400">Ninguno</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categorías Secundarias (Híbridas) -->
+      <div class="p-3 bg-stone-50/70 rounded-xl border border-stone-200/70">
+        <span class="text-[10px] font-mono font-semibold text-stone-600 uppercase tracking-wide block mb-1.5">
+          Categorías Secundarias / Co-ocurrencias
+        </span>
+        <div id="analysisSecondaryList" class="flex flex-wrap gap-1.5">
+          <span class="text-[11px] text-stone-400 italic font-mono">Sin categorías secundarias detectadas</span>
+        </div>
+      </div>
+
+      <!-- JSON Estructurado de Salida -->
+      <div class="rounded-xl border border-stone-200 overflow-hidden bg-stone-900 text-stone-100">
+        <div class="flex items-center justify-between px-3 py-2 bg-stone-800/80 border-b border-stone-700 text-[11px] font-mono">
+          <div class="flex items-center gap-1.5 text-stone-300">
+            <i class="fa-solid fa-code text-amber-400"></i>
+            <span class="font-semibold">JSON de Salida del Análisis</span>
+          </div>
+          <button id="copyAnalysisJsonBtn" class="px-2.5 py-1 rounded bg-stone-700 hover:bg-stone-600 text-white text-[10px] font-semibold transition flex items-center gap-1">
+            <i class="fa-regular fa-copy"></i>
+            <span id="copyAnalysisJsonText">Copiar JSON</span>
+          </button>
+        </div>
+        <pre class="p-3 text-[11px] font-mono max-h-52 overflow-auto select-all leading-relaxed text-stone-200"><code id="analysisJsonOutput">{ }</code></pre>
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="flex items-center justify-between pt-3 border-t border-stone-100 flex-shrink-0 font-mono text-xs">
+      <span id="analysisPersistStatus" class="text-[11px] text-stone-500">
+        <i class="fa-regular fa-circle-check text-emerald-600 mr-1"></i>Análisis verificado en vivo
+      </span>
+      <div class="flex items-center gap-2">
+        <button id="openRichFromAnalysisBtn" class="px-3 py-2 rounded-lg bg-stone-900 hover:bg-black text-white font-semibold transition flex items-center gap-1.5 shadow-sm font-mono text-xs" title="Abrir en Vista Completa enriquecida con video, desglose semántico y visor dual JSON">
+          <i class="fa-solid fa-up-right-and-down-left-from-center text-[10px]"></i>
+          <span>Vista Completa</span>
+        </button>
+        <button id="saveAnalysisToMatrixBtn" class="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-semibold transition flex items-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-plus"></i>
+          <span>Añadir a la Matriz (Waffle)</span>
+        </button>
+        <button id="closeAnalysisResultModalBtn2" class="px-4 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold transition">
+          Cerrar
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

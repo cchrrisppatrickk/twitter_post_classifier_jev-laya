@@ -1,0 +1,70 @@
+<!-- Barra Superior de Navegación y Estadísticas de Scraping -->
+<header class="w-full max-w-[1700px] mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-app-border gap-3 text-xs">
+  <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2 font-bold tracking-tight text-sm">
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse"></span>
+      <span class="font-mono">x-virality-checker</span>
+    </div>
+    <span class="text-app-muted">/</span>
+    <span class="bg-stone-200/80 px-2 py-0.5 rounded text-[11px] font-semibold text-stone-700 font-mono" id="headerPostCount">
+      x · 620 posts
+    </span>
+    <button id="themeToggleBtn" class="ml-1 px-2 py-0.5 rounded border border-stone-300 text-stone-600 text-[10px] hover:bg-stone-200 transition" title="Alternar tema claro/oscuro">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+  </div>
+
+  <!-- Metadatos superiores con valores en tiempo real incluyendo telemetría Jev/IA -->
+  <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-stone-600 text-[11px] font-mono">
+    <div class="flex items-center gap-1.5" title="Verificaciones y tokens procesados">
+      <i class="fa-solid fa-layer-group text-stone-400"></i>
+      <span class="font-bold text-stone-900" id="statChecks">7,440</span>
+      <span class="text-stone-500">checks</span>
+    </div>
+    <div class="flex items-center gap-1.5" title="Afinidad promedio del lote">
+      <i class="fa-solid fa-gauge-high text-stone-400"></i>
+      <span class="font-bold text-stone-900" id="statAvgScore">44.7</span>
+      <span class="text-stone-500">avg score</span>
+    </div>
+    <div class="flex items-center gap-1.5" title="Promedio de likes en el scraping">
+      <i class="fa-regular fa-heart text-stone-400"></i>
+      <span class="font-bold text-stone-900" id="statAvgLikes">1.7K</span>
+      <span class="text-stone-500">avg likes</span>
+    </div>
+
+    <!-- Indicador interactivo de salud del scraper & proxies -->
+    <button id="openPipelineBtn" class="flex items-center gap-1.5 bg-stone-100 hover:bg-stone-200 border border-stone-200 px-2 py-0.5 rounded text-stone-700 transition" title="Ver estado de proxies, rate limits y logs del pipeline de extracción">
+      <span class="pipeline-ping"></span>
+      <span class="font-bold">Scraper 99.8%</span>
+    </button>
+
+    <!-- Costo de inferencia (Local CPU Free) -->
+    <div class="flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/80" title="Inferencia Local en CPU (Intel Core i5-10210U) - Sin costes de API externa">
+      <i class="fa-solid fa-microchip text-emerald-600 text-[10px]"></i>
+      <span class="font-bold text-emerald-900" id="statCost">$0.00</span>
+      <span class="text-emerald-700 text-[10px]">Local CPU</span>
+    </div>
+
+    <div class="flex items-center gap-1.5" title="Tiempo promedio de procesamiento">
+      <i class="fa-regular fa-clock text-stone-400"></i>
+      <span class="font-bold text-stone-900" id="statLatency">8.0s</span>
+    </div>
+
+    <!-- Botón de Reporte Ejecutivo Pro -->
+    <button id="openExecReportBtn" class="bg-stone-900 hover:bg-black text-white px-2.5 py-0.5 rounded font-mono font-semibold text-[10px] flex items-center gap-1 shadow-xs transition" title="Generar informe estratégico consolidado con recomendaciones">
+      <i class="fa-solid fa-file-invoice"></i>
+      <span>Reporte</span>
+    </button>
+
+    <!-- Botón de Acceso a Registry Studio / Configuración -->
+    <a 
+      href="/config" 
+      id="headerStudioBtn" 
+      class="bg-stone-100 hover:bg-stone-200 border border-stone-200 px-2.5 py-0.5 rounded text-stone-700 transition flex items-center gap-1 font-mono font-semibold text-[10px] shadow-xs" 
+      title="Abrir JEV Registry Studio v2.1.0 (Taxonomía, Decisiones y Preguntas)"
+    >
+      <i class="fa-solid fa-sliders text-emerald-600"></i>
+      <span>Studio</span>
+    </a>
+  </div>
+</header>
