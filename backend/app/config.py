@@ -46,8 +46,8 @@ class Settings(BaseSettings):
     MAX_LABELS_PER_POST: int = 4
     SUPPORTED_LANGUAGES: List[str] = Field(default_factory=lambda: ["en", "ja", "es", "zh", "ko"])
 
-    # Hardware y Optimización CPU (Intel Core i5-10210U: 4C/8T)
-    DEVICE: str = "cpu"
+    # Hardware e Inferencia (Autodetección inteligente CPU/GPU: 'auto', 'cuda', 'mps' o 'cpu')
+    DEVICE: str = "auto"
     PYTORCH_NUM_THREADS: int = 3
     PYTORCH_INTEROP_THREADS: int = 2
     MAX_LOADED_MODELS: int = 2

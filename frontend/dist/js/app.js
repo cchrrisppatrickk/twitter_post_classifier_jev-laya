@@ -204,7 +204,7 @@ if (runAiClassificationBtn) {
     }
   });
 }
-
+ 
 // Redibujar el canvas scatter en caso de redimensionamiento de ventana
 window.addEventListener('resize', () => {
   if (currentMainView === 'scatter') {
@@ -213,12 +213,60 @@ window.addEventListener('resize', () => {
 });
 
 // ==========================================================
+// TELEMETRÍA DE HARDWARE EN CABECERA (AUTODETECCIÓN CPU/GPU)
+// ==========================================================
+async function updateHardwareTelemetryBadge() {
+  try {
+    const health = await API.system.getHealth();
+    const badge = document.getElementById('headerHardwareBadge');
+    const icon = document.getElementById('headerHardwareIcon');
+    const label = document.getElementById('headerHardwareLabel');
+    const latency = document.getElementById('statLatency');
+    if (!badge || !label) return;
+
+    const isGpu = health.device && health.device.startsWith('cuda');
+    const isMps = health.device === 'mps';
+
+    if (isGpu) {
+      badge.className = 'flex items-center gap-1.5 bg-purple-50 px-2 py-0.5 rounded border border-purple-200 text-purple-900 transition';
+      if (icon) icon.className = 'fa-solid fa-bolt text-purple-600 text-[10px] animate-pulse';
+      const vramStr = health.vram_total_gb ? ` (${health.vram_total_gb}GB)` : '';
+      const gpuName = health.gpu_model || 'NVIDIA CUDA';
+      label.textContent = `GPU · ${gpuName.length > 20 ? gpuName.substring(0, 18) + '...' : gpuName}${vramStr}`;
+      label.className = 'text-purple-700 text-[10px] font-bold';
+      badge.title = `Aceleración GPU activa: ${health.gpu_model || 'CUDA'} · ${health.vram_total_gb || ''} GB VRAM · ~33ms/post`;
+      if (latency) latency.textContent = health.estimated_latency || '33ms';
+    } else if (isMps) {
+      badge.className = 'flex items-center gap-1.5 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 text-indigo-900 transition';
+      if (icon) icon.className = 'fa-solid fa-microchip text-indigo-600 text-[10px]';
+      label.textContent = 'Apple Silicon (MPS)';
+      label.className = 'text-indigo-700 text-[10px] font-bold';
+      badge.title = 'Inferencia en Apple Silicon Metal (MPS)';
+      if (latency) latency.textContent = health.estimated_latency || '50ms';
+    } else {
+      badge.className = 'flex items-center gap-1.5 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/80 transition';
+      if (icon) icon.className = 'fa-solid fa-microchip text-emerald-600 text-[10px]';
+      const cpuShort = health.cpu_model ? health.cpu_model.split('@')[0].trim() : 'CPU';
+      label.textContent = `Local CPU (${cpuShort.length > 18 ? cpuShort.substring(0, 16) + '...' : cpuShort})`;
+      label.className = 'text-emerald-700 text-[10px] font-semibold';
+      badge.title = `Inferencia en CPU: ${health.cpu_model} · Coste $0.00 · ~18s/post`;
+      if (latency) latency.textContent = health.estimated_latency || '18s';
+    }
+  } catch (err) {
+    console.warn('[Header] Error cargando telemetría de hardware:', err);
+  }
+}
+
+// ==========================================================
 // INICIALIZACIÓN DE LA APLICACIÓN (SINCRONIZACIÓN CON BACKEND)
 // ==========================================================
 window.addEventListener('DOMContentLoaded', async () => {
   // Renderizado inicial inmediato con dataset base
   currentScrapedPosts = buildRealisticScannedDataset();
   renderMatrix();
+
+  // Actualizar telemetría de hardware
+  updateHardwareTelemetryBadge();
 
   // Sincronización asíncrona con el backend FastAPI (categories.json y posts en SQLite WAL)
   await syncTaxonomyAndPostsWithBackend();

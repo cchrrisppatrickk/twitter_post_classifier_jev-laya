@@ -87,11 +87,11 @@
       <span class="font-bold">Scraper 99.8%</span>
     </button>
 
-    <!-- Costo de inferencia (Local CPU Free) -->
-    <div class="flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/80" title="Inferencia Local en CPU (Intel Core i5-10210U) - Sin costes de API externa">
-      <i class="fa-solid fa-microchip text-emerald-600 text-[10px]"></i>
+    <!-- Hardware e Inferencia Dinámica (Auto CPU / GPU) -->
+    <div id="headerHardwareBadge" class="flex items-center gap-1.5 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/80 transition" title="Inferencia Local">
+      <i id="headerHardwareIcon" class="fa-solid fa-microchip text-emerald-600 text-[10px]"></i>
       <span class="font-bold text-emerald-900" id="statCost">$0.00</span>
-      <span class="text-emerald-700 text-[10px]">Local CPU</span>
+      <span id="headerHardwareLabel" class="text-emerald-700 text-[10px]">Local CPU</span>
     </div>
 
     <div class="flex items-center gap-1.5" title="Tiempo promedio de procesamiento">

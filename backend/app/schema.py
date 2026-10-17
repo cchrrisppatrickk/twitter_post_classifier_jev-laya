@@ -387,6 +387,12 @@ class SystemHealthResponse(BaseModel):
     status: str
     device: str
     cpu_model: str
+    gpu_model: Optional[str] = None
+    vram_total_gb: Optional[float] = None
+    vram_used_mb: Optional[float] = None
+    cuda_available: bool = False
+    device_display: Optional[str] = None
+    estimated_latency: Optional[str] = None
     ram_total_gb: float
     ram_available_gb: float
     ram_used_process_mb: float

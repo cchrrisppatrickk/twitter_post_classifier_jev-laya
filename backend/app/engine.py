@@ -73,11 +73,59 @@ def _detect_cpu_model() -> str:
     return f"CPU ({os.cpu_count() or 4} cores)"
 
 
+def resolve_device(requested_device: Optional[str] = None) -> str:
+    """
+    Resuelve el dispositivo de hardware óptimo para inferencia de Laya:
+    - 'auto': Selecciona CUDA si está disponible, luego MPS (Apple Silicon), o CPU por defecto.
+    - 'cuda': Fuerza GPU NVIDIA (valida disponibilidad).
+    - 'mps': Fuerza aceleración Metal en macOS.
+    - 'cpu': Fuerza ejecución pura en procesador central.
+    """
+    req = (requested_device or settings.DEVICE or "auto").strip().lower()
+    if req == "auto":
+        if torch.cuda.is_available():
+            return "cuda"
+        if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+            return "mps"
+        return "cpu"
+    return req
+
+
+def _detect_gpu_info() -> Dict[str, Any]:
+    """Detecta nombre del modelo de GPU, memoria VRAM total y en uso si CUDA está disponible."""
+    if not torch.cuda.is_available():
+        return {
+            "gpu_model": None,
+            "vram_total_gb": None,
+            "vram_used_mb": None,
+            "cuda_available": False
+        }
+    try:
+        gpu_name = torch.cuda.get_device_name(0)
+        props = torch.cuda.get_device_properties(0)
+        total_gb = round(props.total_memory / (1024**3), 2)
+        allocated_mb = round(torch.cuda.memory_allocated(0) / (1024**2), 2)
+        return {
+            "gpu_model": gpu_name,
+            "vram_total_gb": total_gb,
+            "vram_used_mb": allocated_mb,
+            "cuda_available": True
+        }
+    except Exception as e:
+        logger.warning(f"Error extrayendo telemetría de GPU CUDA: {e}")
+        return {
+            "gpu_model": "GPU NVIDIA CUDA",
+            "vram_total_gb": None,
+            "vram_used_mb": None,
+            "cuda_available": True
+        }
+
+
 class LayaEngine:
     _instance: Optional["LayaEngine"] = None
 
-    def __init__(self, device: str = settings.DEVICE, max_loaded: int = settings.MAX_LOADED_MODELS):
-        self.device = device
+    def __init__(self, device: Optional[str] = None, max_loaded: int = settings.MAX_LOADED_MODELS):
+        self.device = resolve_device(device)
         self.max_loaded = max_loaded
         self.router = None
         self.models_loaded: List[str] = []
@@ -86,8 +134,15 @@ class LayaEngine:
         self._init_router()
 
     def _init_router(self) -> None:
-        """Inicializa Laya Router con los pesos locales / cache en PyTorch CPU."""
-        logger.info(f"Iniciando Laya Router en modo {self.device.upper()} (hilos PyTorch: {torch.get_num_threads()})...")
+        """Inicializa Laya Router con los pesos locales / cache en PyTorch (CPU o GPU)."""
+        gpu_info = _detect_gpu_info()
+        if self.device.startswith("cuda"):
+            logger.info(f"🚀 Iniciando Laya Router en GPU acelerada [{gpu_info['gpu_model'] or 'CUDA'}] (VRAM: {gpu_info['vram_total_gb'] or 'N/A'} GB)...")
+        elif self.device == "mps":
+            logger.info("⚡ Iniciando Laya Router en Apple Silicon (Metal Performance Shaders - MPS)...")
+        else:
+            logger.info(f"⚡ Iniciando Laya Router en modo CPU [{_detect_cpu_model()}] (hilos PyTorch: {torch.get_num_threads()})...")
+
         t0 = time.perf_counter()
         from laya import Router
 
@@ -96,28 +151,48 @@ class LayaEngine:
             max_loaded=self.max_loaded
         )
         elapsed_ms = (time.perf_counter() - t0) * 1000.0
-        logger.info(f"Laya Router cargado exitosamente en {elapsed_ms:.2f} ms")
+        logger.info(f"Laya Router cargado exitosamente en modo {self.device.upper()} ({elapsed_ms:.2f} ms)")
 
     @classmethod
     def get_instance(cls) -> "LayaEngine":
-        """Singleton thread-safe para compartir el modelo en memoria RAM sin duplicación."""
+        """Singleton thread-safe para compartir el modelo en memoria RAM/VRAM sin duplicación."""
         if cls._instance is None:
             cls._instance = LayaEngine()
         return cls._instance
 
     def get_health(self, active_batches: int = 0) -> SystemHealthResponse:
-        """Telemetría de hardware en tiempo real (CPU, RAM y checkpoints activos)."""
+        """Telemetría de hardware en tiempo real (CPU, GPU, RAM, VRAM y batches activos)."""
         vm = psutil.virtual_memory()
         proc = psutil.Process(os.getpid())
         rss_mb = proc.memory_info().rss / (1024 * 1024)
 
         cpu_info = _detect_cpu_model()
+        gpu_info = _detect_gpu_info()
         loaded = list(self.models_loaded) if self.models_loaded else [settings.PRIMARY_MODEL]
+
+        is_gpu = self.device.startswith("cuda")
+        is_mps = self.device == "mps"
+
+        if is_gpu:
+            device_display = f"GPU ({gpu_info['gpu_model'] or 'NVIDIA CUDA'})"
+            est_latency = "~33ms/post"
+        elif is_mps:
+            device_display = "Apple Silicon (MPS)"
+            est_latency = "~50ms/post"
+        else:
+            device_display = cpu_info if cpu_info.startswith("CPU") else f"CPU ({cpu_info})"
+            est_latency = "~18s/post"
 
         return SystemHealthResponse(
             status="healthy" if self.router is not None else "degraded",
             device=self.device,
             cpu_model=cpu_info,
+            gpu_model=gpu_info["gpu_model"],
+            vram_total_gb=gpu_info["vram_total_gb"],
+            vram_used_mb=gpu_info["vram_used_mb"],
+            cuda_available=gpu_info["cuda_available"],
+            device_display=device_display,
+            estimated_latency=est_latency,
             ram_total_gb=round(vm.total / (1024**3), 2),
             ram_available_gb=round(vm.available / (1024**3), 2),
             ram_used_process_mb=round(rss_mb, 2),
