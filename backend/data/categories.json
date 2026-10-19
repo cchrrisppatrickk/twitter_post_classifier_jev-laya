@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "registry_version": "2.1.1",
+  "registry_version": "2.2.0",
   "schema_version": "2.1.1",
   "updated_at": "2026-10-15T21:45:00Z",
   "created_at": "2026-10-10T00:00:00Z",
@@ -63,6 +63,13 @@
         "medium.com/",
         "substack.com/"
       ]
+    },
+    "deterministic_overrides": {
+      "civitai.com": "mod_image",
+      "openart.ai/workflows": "mod_image",
+      "comfyworkflows.com": "mod_image",
+      "flowt.ai": "mod_image",
+      "comfy.icu": "mod_image"
     }
   },
   "supplementary_questions": {
@@ -123,6 +130,72 @@
       "criteria": {
         "true": "El contenido se centra en ejecución local, autoalojamiento (self-hosted), cuantizaciones para inferencia offline o herramientas de ejecución en máquina propia.",
         "false": "El contenido depende de servicios en la nube, APIs remotas propietarias o no aborda la ejecución local autónoma."
+      }
+    },
+    "gen_modality": {
+      "type": "choice",
+      "instructions": "¿Qué modalidad técnica o tipo de contenido describe principalmente la publicación?",
+      "active": true,
+      "criteria": {
+        "mod_image": "Generación o edición de imágenes fijas con IA, checkpoints de difusión visual, LoRAs de estilo o modelos de texto a imagen.",
+        "mod_video": "Generación o animación de video con IA, modelos de texto a video, imagen a video o secuencias en movimiento.",
+        "mod_3d": "Generación o reconstrucción de mallas 3D, Gaussian splatting, nubes de puntos o assets volumétricos generados con IA.",
+        "mod_audio": "Síntesis de voz (TTS), clonación vocal, transcripción fonética automática (STT) o generación de música y efectos sonoros.",
+        "mod_llm_agents": "Modelos de lenguaje extensos (LLMs), arquitecturas de razonamiento, frameworks de agentes autónomos o prompting textual.",
+        "mod_code_web3d": "Desarrollo de software tradicional, librerías, render interactivo 3D en navegador (Three.js, WebGL, WebGPU), shaders o canvas web.",
+        "mod_game_dev": "Desarrollo de videojuegos independientes o comerciales, motores (Unity, Unreal, Godot), devlogs o mecánicas de juego.",
+        "mod_art_manual": "Ilustración artística digital o tradicional, páginas de manga, anime o diseño gráfico creado manualmente sin modelos de IA.",
+        "none": "Publicaciones personales, memes, reflexiones de vida cotidiana o contenido que no encaja en las opciones anteriores (Opción de escape obligatoria)."
+      }
+    },
+    "model_family_image": {
+      "type": "choice",
+      "instructions": "¿Sobre qué familia o arquitectura de modelos de generación de imágenes trata la publicación? Selecciona none si no se enfoca en un modelo específico.",
+      "active": true,
+      "criteria": {
+        "flux": "Modelos de la arquitectura Flux desarrollados por Black Forest Labs (incluyendo variantes Schnell, Dev, Kontext o sus adaptaciones comunitarias).",
+        "anima_illustrious": "Modelos especializados en anime, manga e ilustración estilizada como Anima, Illustrious, NoobAI o Pony Diffusion.",
+        "qwen_image": "Modelos de generación y comprensión visual multimodal de la familia Qwen-Image desarrollados por Alibaba.",
+        "sdxl_sd15": "Modelos clásicos de difusión basados en Stable Diffusion XL (SDXL) o Stable Diffusion 1.5 y sus fine-tunes.",
+        "emerging_image": "Arquitecturas emergentes o plataformas especializadas de imagen como MossImage, Krea, PixArt o Hunyuan Image.",
+        "none": "La publicación no trata sobre una familia específica de modelos de generación de imágenes o es una discusión genérica (Opción de escape obligatoria)."
+      }
+    },
+    "model_family_video": {
+      "type": "choice",
+      "instructions": "¿Sobre qué familia o arquitectura de generación de video trata la publicación? Selecciona none si no se enfoca en un modelo específico.",
+      "active": true,
+      "criteria": {
+        "wan_video": "Modelos de difusión de video de la arquitectura Wan (Wan 2.1, 2.2, 14B) desarrollados por Alibaba o sus fine-tunes.",
+        "ltx_video": "Modelos de generación de video de alto rendimiento de la familia LTX-Video (LTXV) desarrollados por Lightricks.",
+        "minimax_hailuo": "Modelos cinematográficos de generación de video de la familia MiniMax o Hailuo (como H3).",
+        "hunyuan_video": "Arquitecturas de generación de video de código abierto de la familia Hunyuan Video.",
+        "anim_diffusion": "Modelos de capas de movimiento aplicadas sobre imágenes estáticas como AnimateDiff o LivePortrait.",
+        "commercial_video": "Plataformas propietarias o cerradas de video como Sora, Kling, Runway Gen-3 o Google Veo.",
+        "none": "La publicación no trata sobre una familia específica de generación de video (Opción de escape obligatoria)."
+      }
+    },
+    "model_family_3d": {
+      "type": "choice",
+      "instructions": "¿Sobre qué arquitectura o herramienta de generación 3D con IA trata la publicación? Selecciona none si no aplica.",
+      "active": true,
+      "criteria": {
+        "trellis_pixel3d": "Modelos basados en la arquitectura Trellis (Trellis.2) o derivados directos como Pixal3D para generación de mallas y assets 3D.",
+        "hunyuan_3d": "Modelos de la familia Hunyuan3D para generación volumétrica y texturizado de mallas tridimensionales.",
+        "tripo_instantmesh": "Herramientas de reconstrucción rápida de imagen a 3D como TripoSR, Tripo o InstantMesh.",
+        "gaussian_splatting": "Tecnologías, pipelines o visores de 3D Gaussian Splatting aplicados a captura o generación de escenas.",
+        "none": "La publicación no trata sobre modelos o herramientas de generación 3D con IA (Opción de escape obligatoria)."
+      }
+    },
+    "model_family_audio": {
+      "type": "choice",
+      "instructions": "¿Sobre qué familia de síntesis o generación de audio trata la publicación? Selecciona none si no aplica.",
+      "active": true,
+      "criteria": {
+        "tts_voice": "Modelos de síntesis de voz natural y clonación vocal ultrarrápida como F5-TTS, CosyVoice, Kokoro o Chatterbox.",
+        "music_generation": "Modelos de generación de pistas musicales completas y producción de canciones como Suno o Udio.",
+        "transcription_stt": "Modelos de reconocimiento de voz a texto y transcripción fonética como Whisper.",
+        "none": "La publicación no trata sobre modelos específicos de audio o voz (Opción de escape obligatoria)."
       }
     }
   },

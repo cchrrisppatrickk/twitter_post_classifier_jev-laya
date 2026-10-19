@@ -129,6 +129,80 @@ def detect_asset_domains(text: str) -> Tuple[List[str], List[str]]:
     return list(detected_assets), found_urls
 
 
+def detect_deterministic_override(text: str, found_urls: List[str]) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Evalúa reglas deterministas duras de OVERRIDE basadas en dominios de activos.
+    Si se detecta un activo inequívoco (Civitai, ComfyUI, Hugging Face Diffusers, etc.),
+    retorna (modalidad_forzada, tipo_de_activo) para neutralizar el sesgo del modelo.
+    """
+    data = load_registry_data()
+    scoring = data.get("scoring", {})
+    overrides_map = scoring.get("deterministic_overrides", {})
+
+    text_lower = text.lower()
+    
+    # 1. Comprobar dominios de URLs encontradas
+    for url in found_urls:
+        u_lower = url.lower()
+        if "civitai.com" in u_lower:
+            return "mod_image", "civitai_lora"
+        if any(w in u_lower for w in ["openart.ai/workflows", "comfyworkflows.com", "flowt.ai", "comfy.icu"]):
+            return "mod_image", "comfyui_workflow"
+        if "huggingface.co" in u_lower or "hf.co" in u_lower:
+            # Si menciona video o diffusers de video
+            if any(v in u_lower or v in text_lower for v in ["wan", "ltxv", "ltx-video", "hunyuanvideo", "cogvideox", "minimax"]):
+                return "mod_video", "huggingface_model"
+            # Si menciona 3D
+            if any(t in u_lower or t in text_lower for t in ["trellis", "pixal3d", "hunyuan3d", "triposr"]):
+                return "mod_3d", "huggingface_model"
+            # Por defecto en HF si menciona checkpoint/lora/diffusers/flux/anima/sd
+            if any(img in u_lower or img in text_lower for img in ["flux", "anima", "illustrious", "lora", "sdxl", "diffusers", "safetensors", "checkpoint"]):
+                return "mod_image", "huggingface_model"
+
+    # 2. Comprobar menciones en el texto si hay dominios mapeados
+    for domain, forced_modality in overrides_map.items():
+        if domain.lower() in text_lower:
+            return forced_modality, None
+
+    return None, None
+
+
+PASS1_QUESTION_IDS = [
+    "gen_modality",
+    "content_format",
+    "technical_depth",
+    "is_local_first",
+    "is_uncensored_or_nsfw"
+]
+
+
+def build_pass1_schema() -> Dict[str, Any]:
+    """Compila el esquema ultra-ligero para Pasada 1 (5 preguntas base)."""
+    data = load_registry_data()
+    supp = data.get("supplementary_questions", {})
+    schema: Dict[str, Any] = {}
+    for qid in PASS1_QUESTION_IDS:
+        if qid in supp and supp[qid].get("active", True):
+            schema[qid] = supp[qid]
+    return schema
+
+
+def build_pass2_schema(modality: str) -> Dict[str, Any]:
+    """Compila el esquema condicional para Pasada 2 (1 pregunta de familia específica)."""
+    data = load_registry_data()
+    supp = data.get("supplementary_questions", {})
+    mapping = {
+        "mod_image": "model_family_image",
+        "mod_video": "model_family_video",
+        "mod_3d": "model_family_3d",
+        "mod_audio": "model_family_audio",
+    }
+    target_qid = mapping.get(modality)
+    if target_qid and target_qid in supp and supp[target_qid].get("active", True):
+        return {target_qid: supp[target_qid]}
+    return {}
+
+
 def build_decision_schema(active_questions: Optional[List[str]] = None) -> Dict[str, Any]:
     """
     Compila el esquema fuertemente tipado para el enrutador de Laya System 1:

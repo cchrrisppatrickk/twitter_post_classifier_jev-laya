@@ -12,13 +12,20 @@ import time
 from typing import Any, Dict, List, Optional, Set, Tuple
 import unicodedata
 
+import json
+import urllib.request
+import urllib.error
+
 import psutil
 import torch
 
 from .config import settings
 from .registry import (
     build_decision_schema,
+    build_pass1_schema,
+    build_pass2_schema,
     detect_asset_domains,
+    detect_deterministic_override,
     get_categories_dict,
     get_effective_threshold,
     get_root_family,
@@ -220,15 +227,51 @@ class LayaEngine:
         except Exception:
             pass
 
+    def _predict_jev(self, state_str: str, schema: Dict[str, Any]) -> Dict[str, Any]:
+        """Envía solicitud de inferencia a la API de TypeSafe System One (Jev Cloud)."""
+        headers = {
+            "Authorization": f"Bearer {settings.JEV_API_KEY}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "state": state_str,
+            "questions": schema
+        }
+        url = f"{settings.JEV_BASE_URL.rstrip('/')}/v1/predict"
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers=headers,
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=10.0) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            return data
+
+    def _predict_with_engine(self, state_str: str, schema: Dict[str, Any]) -> Tuple[Dict[str, Any], str]:
+        """Enruta la inferencia a Jev (Cloud) o Laya (Local) según settings.DECISION_ENGINE."""
+        if settings.DECISION_ENGINE.lower() == "jev" and settings.JEV_API_KEY:
+            try:
+                res = self._predict_jev(state_str, schema)
+                return res, "jev"
+            except Exception as e:
+                logger.warning(f"Error al invocar Jev API ({e}). Ejecutando fallback en Laya local...")
+
+        # Inferencia local en Laya
+        with torch.inference_mode():
+            res = self.router.predict(state_str, schema)
+        routing = res.get("routing", {})
+        used_model = routing.get("model", settings.PRIMARY_MODEL)
+        if used_model not in self.models_loaded:
+            self.models_loaded.append(used_model)
+        return res, used_model
+
     def classify_post(self, post: CleanPost, active_questions: Optional[List[str]] = None) -> ClassificationResult:
         """
-        Ejecuta la inferencia System 1 en un solo forward pass sobre CPU:
-        - Normalización Unicode NFKC
-        - Inferencia Laya Router con torch.inference_mode()
-        - Soporte para active_questions opcionales (perfiles o subconjuntos de preguntas)
-        - Family Gating (anti-colapso léxico)
-        - Inyección determinista de assets por URL
-        - Evaluación de umbrales y abstención PENDING
+        Ejecuta la inferencia híbrida neuro-simbólica System 1:
+        1. Pre-evaluación Simbólica: Overrides deterministas por URLs y dominios (Civitai, ComfyUI, Hugging Face).
+        2. Inferencia en 2 Pasadas Condicionales (Pasada 1: base ligera; Pasada 2: familia de modelo).
+        3. Post-procesamiento: Boosters cruzados, Family Gating y política de abstención calibrada.
         """
         t0 = time.perf_counter()
 
@@ -242,30 +285,57 @@ class LayaEngine:
         if post.detected_domains:
             state_str += f"\nDomains: {', '.join(post.detected_domains)}"
 
-        # 2. Determinar esquema de preguntas para este post
-        if active_questions is not None:
-            schema_to_use = build_decision_schema(active_questions=active_questions)
-            if not schema_to_use:
-                schema_to_use = self.schema
-        else:
-            schema_to_use = self.schema
+        # 2. Pre-evaluación Simbólica (Deterministic Overrides)
+        override_modality, override_asset = None, None
+        if settings.ENABLE_DETERMINISTIC_OVERRIDES:
+            urls_to_check = list(post.detected_domains) + list(post.detected_assets)
+            if post.post_url:
+                urls_to_check.append(post.post_url)
+            override_modality, override_asset = detect_deterministic_override(norm_text, urls_to_check)
+            if override_asset and override_asset not in post.detected_assets:
+                post.detected_assets.append(override_asset)
 
-        # Inferencia en el enrutador bajo modo de inferencia estricto (cero autograd)
-        with torch.inference_mode():
-            raw_result = self.router.predict(state_str, schema_to_use)
+        # 3. Inferencia de Preguntas (Arquitectura de 2 Pasadas)
+        raw_answers: Dict[str, Any] = {}
+        engine_used = "laya"
+
+        if active_questions is not None:
+            # Modo explícito (usado en tests específicos o perfiles custom)
+            schema_to_use = build_decision_schema(active_questions=active_questions)
+            raw_res, engine_used = self._predict_with_engine(state_str, schema_to_use)
+            raw_answers = raw_res.get("answers", {})
+        else:
+            # Pasada 1: Esquema base ligero (category + pass1_questions)
+            pass1_q_list = ["category", "gen_modality", "content_format", "technical_depth", "is_local_first", "is_uncensored_or_nsfw"]
+            schema_pass1 = build_decision_schema(active_questions=pass1_q_list)
+            res_pass1, engine_used = self._predict_with_engine(state_str, schema_pass1)
+            raw_answers.update(res_pass1.get("answers", {}))
+
+            # Determinar modalidad efectiva (override determinista manda sobre el modelo)
+            eff_modality = override_modality or raw_answers.get("gen_modality", {}).get("choice")
+
+            # Pasada 2 (Condicional): Solo si la modalidad es generativa
+            if eff_modality in {"mod_image", "mod_video", "mod_3d", "mod_audio"}:
+                schema_pass2 = build_pass2_schema(eff_modality)
+                if schema_pass2:
+                    res_pass2, _ = self._predict_with_engine(state_str, schema_pass2)
+                    raw_answers.update(res_pass2.get("answers", {}))
+
         elapsed_ms = (time.perf_counter() - t0) * 1000.0
 
-        # Registrar checkpoint del modelo usado
-        routing = raw_result.get("routing", {})
-        used_model = routing.get("model", settings.PRIMARY_MODEL)
-        if used_model not in self.models_loaded:
-            self.models_loaded.append(used_model)
+        if override_modality:
+            raw_answers["deterministic_override"] = {
+                "modality": override_modality,
+                "asset": override_asset
+            }
 
-        # 3. Post-procesar respuestas
+        # 4. Post-procesar respuestas
         return self._post_process(
             post=post,
             state_str=state_str,
-            raw_result=raw_result,
+            raw_answers=raw_answers,
+            override_modality=override_modality,
+            engine_used=engine_used,
             latency_ms=elapsed_ms
         )
 
@@ -273,12 +343,11 @@ class LayaEngine:
         self,
         post: CleanPost,
         state_str: str,
-        raw_result: Dict[str, Any],
+        raw_answers: Dict[str, Any],
+        override_modality: Optional[str],
+        engine_used: str,
         latency_ms: float
     ) -> ClassificationResult:
-        routing = raw_result.get("routing", {})
-        used_model = routing.get("model", settings.PRIMARY_MODEL)
-        raw_answers = raw_result.get("answers", {})
         cats_dict = get_categories_dict()
 
         # 3a. Extraer preguntas suplementarias
@@ -306,6 +375,15 @@ class LayaEngine:
         is_nsfw = False
         if isinstance(nsfw_ans, dict):
             is_nsfw = float(nsfw_ans.get("noul", 0.0)) >= 0.50
+
+        # Modalidad y familias de modelos de IA
+        modality_ans = raw_answers.get("gen_modality", {})
+        gen_modality = modality_ans.get("choice") if isinstance(modality_ans, dict) else None
+
+        img_fam = raw_answers.get("model_family_image", {}).get("choice") if isinstance(raw_answers.get("model_family_image"), dict) else None
+        vid_fam = raw_answers.get("model_family_video", {}).get("choice") if isinstance(raw_answers.get("model_family_video"), dict) else None
+        m3d_fam = raw_answers.get("model_family_3d", {}).get("choice") if isinstance(raw_answers.get("model_family_3d"), dict) else None
+        aud_fam = raw_answers.get("model_family_audio", {}).get("choice") if isinstance(raw_answers.get("model_family_audio"), dict) else None
 
         # 3b. Extraer respuestas de Familias Raíz (Family Gating)
         active_families: Set[str] = set()
@@ -337,7 +415,7 @@ class LayaEngine:
             if chosen_asset and chosen_asset != "none" and chosen_asset not in detected_assets:
                 detected_assets.append(chosen_asset)
 
-        # 3d. Construir candidatos y calcular Boosters
+        # 3d. Construir candidatos iniciales desde 'category'
         cat_ans = raw_answers.get("category", {})
         probabilities: Dict[str, float] = {}
         if isinstance(cat_ans, dict):
@@ -370,7 +448,55 @@ class LayaEngine:
                 if any(kw.lower() in state_lower for kw in kws):
                     candidates[c_id] = max(candidates.get(c_id, 0.0), 0.45)
 
-        # 3e. Aplicar Family Gating y Boosters
+        # 3e. Inyección de Candidatos por Familias de Modelos de IA
+        if img_fam and img_fam != "none":
+            active_families.add("ia")
+            candidates["gen_imagenes"] = max(candidates.get("gen_imagenes", 0.0), 0.70)
+            if img_fam == "flux":
+                candidates["gen_imagenes"] = max(candidates.get("gen_imagenes", 0.0), 0.85)
+            elif img_fam == "anima_illustrious":
+                candidates["fanart_anime"] = max(candidates.get("fanart_anime", 0.0), 0.65)
+                candidates["mangas"] = max(candidates.get("mangas", 0.0), 0.60)
+
+        if vid_fam and vid_fam != "none":
+            active_families.add("ia")
+            candidates["gen_video"] = max(candidates.get("gen_video", 0.0), 0.80)
+
+        if m3d_fam and m3d_fam != "none":
+            active_families.add("ia")
+            active_families.add("modelado_3d")
+            candidates["gen_3d"] = max(candidates.get("gen_3d", 0.0), 0.80)
+            candidates["modelado_3d"] = max(candidates.get("modelado_3d", 0.0), 0.60)
+
+        if aud_fam and aud_fam != "none":
+            active_families.add("ia")
+            candidates["gen_audio"] = max(candidates.get("gen_audio", 0.0), 0.80)
+
+        # Inyección por Modalidad general
+        eff_mod = override_modality or gen_modality
+        if eff_mod == "mod_code_web3d":
+            candidates["threejs_webgl"] = max(candidates.get("threejs_webgl", 0.0), 0.75)
+            candidates["dev_tools"] = max(candidates.get("dev_tools", 0.0), 0.65)
+        elif eff_mod == "mod_game_dev":
+            candidates["indie_dev"] = max(candidates.get("indie_dev", 0.0), 0.75)
+            candidates["juegos"] = max(candidates.get("juegos", 0.0), 0.70)
+        elif eff_mod == "mod_art_manual":
+            candidates["mangas"] = max(candidates.get("mangas", 0.0), 0.75)
+            candidates["fanart_anime"] = max(candidates.get("fanart_anime", 0.0), 0.65)
+        elif eff_mod == "mod_llm_agents":
+            candidates["agentes_ia"] = max(candidates.get("agentes_ia", 0.0), 0.75)
+
+        # OVERRIDE DETERMINISTA DURO: si hay señal directa (Civitai, ComfyUI, etc.)
+        if override_modality == "mod_image":
+            active_families.add("ia")
+            candidates["gen_imagenes"] = max(candidates.get("gen_imagenes", 0.0), 0.90)
+            if "civitai_lora" in detected_assets:
+                candidates["lora_civitai"] = max(candidates.get("lora_civitai", 0.0), 0.92)
+            if "comfyui_workflow" in detected_assets:
+                candidates["comfyui_workflows"] = max(candidates.get("comfyui_workflows", 0.0), 0.92)
+                candidates["comfyui"] = max(candidates.get("comfyui", 0.0), 0.85)
+
+        # 3f. Aplicar Family Gating y Boosters finales
         boosted_scores: Dict[str, float] = {}
         for c_id, base_score in candidates.items():
             c_info = cats_dict.get(c_id, {})
@@ -379,7 +505,7 @@ class LayaEngine:
 
             # Family Gating: si la familia fue rechazada (<0.30)
             fam_noul = family_scores.get(root_fam, 0.5)
-            if fam_noul < 0.30 and not any(a in c_info.get("boosters", {}).get("reproducible_assets", []) for a in detected_assets):
+            if fam_noul < 0.30 and not any(a in c_info.get("boosters", {}).get("reproducible_assets", []) for a in detected_assets) and not (override_modality and root_fam == "ia"):
                 score *= 0.15
             elif fam_noul >= 0.50:
                 score += 0.15
@@ -398,9 +524,15 @@ class LayaEngine:
             if any(kw.lower() in state_lower for kw in kws):
                 score += 0.08
 
+            # Penalización anti-secuestro si hubo override determinista
+            if override_modality == "mod_image" and root_fam in {"dev_tools", "negocios_saas"}:
+                score *= 0.20
+            elif override_modality == "mod_video" and root_fam in {"dev_tools", "negocios_saas"}:
+                score *= 0.20
+
             boosted_scores[c_id] = round(score, 4)
 
-        # 3f. Ordenar y seleccionar categoría primaria
+        # 3g. Ordenar y seleccionar categoría primaria
         sorted_candidates = sorted(boosted_scores.items(), key=lambda x: x[1], reverse=True)
 
         primary_cat = "otros"
@@ -410,21 +542,34 @@ class LayaEngine:
         if sorted_candidates:
             top_cat, top_score = sorted_candidates[0]
             eff_threshold = get_effective_threshold(top_cat)
-
-            # Lógica de Abstención PENDING (ADR-007)
             has_reproducible_asset = len(detected_assets) > 0
-            if top_score < settings.MIN_CONFIDENCE_ABSTAIN:
-                status = "PENDING"
-                primary_cat = "otros"
-                affinity_score = round(top_score, 4)
-            elif top_score < min(eff_threshold, settings.MIN_THRESHOLD_FOR_PRIMARY) and not has_reproducible_asset:
-                status = "PENDING"
-                primary_cat = "otros"
-                affinity_score = round(top_score, 4)
-            else:
+
+            # Si hubo override determinista inequívoco, se confía en la regla dura
+            if override_modality:
                 status = "CLASSIFIED"
                 primary_cat = top_cat
                 affinity_score = round(min(top_score, 1.0), 4)
+            else:
+                # Política de abstención diferenciada Laya vs Jev
+                if "laya" in str(engine_used).lower():
+                    threshold_to_use = max(eff_threshold, settings.LAYA_THRESHOLD)
+                    min_abstain = settings.LAYA_MIN_ABSTAIN
+                else:
+                    threshold_to_use = min(eff_threshold, settings.JEV_THRESHOLD)
+                    min_abstain = settings.JEV_MIN_ABSTAIN
+
+                if top_score < min_abstain:
+                    status = "PENDING"
+                    primary_cat = "otros"
+                    affinity_score = round(top_score, 4)
+                elif top_score < threshold_to_use and not has_reproducible_asset:
+                    status = "PENDING"
+                    primary_cat = "otros"
+                    affinity_score = round(top_score, 4)
+                else:
+                    status = "CLASSIFIED"
+                    primary_cat = top_cat
+                    affinity_score = round(min(top_score, 1.0), 4)
 
         # Categorías secundarias
         secondary_list: List[SecondaryCategoryItem] = []
@@ -452,7 +597,7 @@ class LayaEngine:
             is_nsfw=is_nsfw,
             is_outlier=is_outlier,
             status=status,
-            engine_used=used_model,
+            engine_used=engine_used,
             inference_latency_ms=round(latency_ms, 2),
             raw_answers=raw_answers
         )

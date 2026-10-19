@@ -39,7 +39,15 @@ class Settings(BaseSettings):
     YIELD_SLEEP_SECONDS: float = 0.005  # 5ms de desahogo para Event Loop FastAPI
     BATCH_YIELD_SECONDS: float = 0.015  # 15ms de desahogo térmico entre inferencias de lotes
 
-    # Taxonomía y Umbrales System 1
+    # Taxonomía y Umbrales System 1 (Motor Dual Jev / Laya)
+    DECISION_ENGINE: str = "laya"  # 'laya' (local CPU/GPU) o 'jev' (TypeSafe Cloud API)
+    JEV_API_KEY: Optional[str] = None
+    JEV_BASE_URL: str = "https://api.jev.dev"
+    ENABLE_DETERMINISTIC_OVERRIDES: bool = True
+    LAYA_THRESHOLD: float = 0.85
+    LAYA_MIN_ABSTAIN: float = 0.70
+    JEV_THRESHOLD: float = 0.75
+    JEV_MIN_ABSTAIN: float = 0.55
     DEFAULT_THRESHOLD: float = 0.75
     MIN_CONFIDENCE_ABSTAIN: float = 0.55
     MIN_THRESHOLD_FOR_PRIMARY: float = 0.70
